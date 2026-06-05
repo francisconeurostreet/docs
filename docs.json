@@ -9,30 +9,26 @@
   },
   "favicon": "/favicon.svg",
   "navigation": {
-    "pages": [
-      {
-        "group": "Getting Started",
-        "pages": [
-          "index",
-          "quickstart"
-        ]
-      }
-    ],
-    "global": {
-      "anchors": [
+  "tabs": [
+    {
+      "tab": "Guides",
+      "groups": [
         {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
+          "group": "Getting Started",
+          "pages": [
+            "index",
+            "quickstart",
+            "changelog"
+          ]
         }
       ]
+    },
+    {
+      "tab": "API Reference",
+      "openapi": "openapi.json"
     }
-  },
+  ]
+},
   "logo": {
     "light": "/logo/light.svg",
     "dark": "/logo/dark.svg"
