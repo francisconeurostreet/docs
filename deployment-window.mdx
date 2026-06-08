@@ -1,0 +1,19 @@
+---
+title: "Deployment window"
+description: "When to expect routine Ignite API updates."
+---
+
+We usually deploy updates daily between 5:00 PM and 6:00 PM Eastern Time.
+
+Most deployments should not require extended downtime. During this window, you may still see brief interruptions, slower responses, or transient errors while services update.
+
+## Integration guidance
+
+- Avoid scheduling large imports or exports during this window when possible.
+- Treat short-lived `5xx`, timeout, or connection errors as retryable.
+- Use exponential backoff for retries instead of retrying in a tight loop.
+- If an issue continues outside the deployment window, treat it as an incident rather than normal deploy behavior.
+
+<Note>
+  This is a routine deployment window, not a guaranteed downtime period. Some days may have not have customer impact.
+</Note>

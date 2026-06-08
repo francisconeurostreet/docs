@@ -1,47 +1,74 @@
 ---
 title: "Quickstart"
-description: "Begin with a guide on the fastest path to a successful outcome"
+description: "Authenticate with Ignite API and make your first request."
 ---
 
-Describe how someone begins using your product. What is the first thing they need to do? Are there any prerequisites?
+This guide shows the minimum flow for calling Ignite API.
 
-A quickstart should take someone from zero to using your product. They'll get a quick win and a sense of what they can accomplish.
+Use `{BASE_URL}` as the environment URL provided by Ignite.
 
 ## Prerequisites
 
 Before you begin, you must have:
 
-- Requirement one (for example, Node.js 18+, a free account, an API key)
-- Requirement two (for example, a compatible device, a compatible browser, a compatible operating system)
+- An Ignite user account with API access.
+- The correct `{BASE_URL}` for your environment.
+- The email and password for the account you want to authenticate.
 
-## Get started
+## Authenticate
 
 <Steps>
-  <Step title="Install">
-    Describe how to install your product or sign up.
+  <Step title="Request a session token">
+    Send your credentials to `POST /auth/login/`.
 
     ```bash
-    npm install your-package
+    curl -X POST "{BASE_URL}/auth/login/" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "email": "trader@example.com",
+        "password": "your-password"
+      }'
     ```
   </Step>
-  <Step title="Configure">
-    Describe any setup or configuration needed before first use.
 
-    ```bash
-    your-cli init
+  <Step title="Read the token">
+    The response includes a `key`. Session tokens are short-lived and expire after 3 hours.
+
+    ```json
+    {
+      "key": "123abc456def789",
+      "prop_firm": "demo-firm",
+      "expires_at": "2026-02-04T12:00:00Z"
+    }
     ```
   </Step>
-  <Step title="Run it">
-    Show the first thing a user does to see it working.
+
+  <Step title="Send the token with each request">
+    Use the token in the `Authorization` header with the `Token` prefix.
 
     ```bash
-    your-cli start
+    curl "{BASE_URL}/api/accounts/summary/" \
+      -H "Authorization: Token 123abc456def789"
     ```
   </Step>
 </Steps>
 
-<Tip>
-  Give people a way to get help. This could be a link to a support page, a chat with a customer support agent, or a forum for your product.
+## Authorization header
 
-  Example: Need help? Reach out to us at [support@yourcompany.com](mailto:support@yourcompany.com).
+Every authenticated request must include:
+
+```http
+Authorization: Token <token>
+```
+
+## Common IDs
+
+Some endpoints require IDs from Ignite operational views:
+
+- `challenge_id`: Prop Tech Configuration -> Challenges
+- `user_id`: Tickblaze Manager -> Users
+- `account_id`: Tickblaze Manager -> Accounts
+
+<Tip>
+  Browse the [API reference](/api-reference) for endpoint-specific request bodies, response schemas, and examples.
 </Tip>

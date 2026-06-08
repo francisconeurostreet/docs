@@ -1,9 +1,9 @@
 {
     "openapi": "3.0.3",
     "info": {
-        "title": "TBBO API",
+        "title": "Ignite API",
         "version": "1.0.0",
-        "description": "Authentication uses short-lived session tokens (3 hours).\n\nSend the token with every request using the `Authorization` header:\n\n```\nAuthorization: Token <token>\n```\n\nExample:\n\n```\nAuthorization: Token 123abc456def789\n```\n\nTo obtain a token, call `POST /auth/login/` with valid credentials. The response includes a `key` value. Use that value in the header above for subsequent API calls.\n\nHow to find required IDs:\n\n- `challenge_id`: Prop Tech Configuration -> Challenges\n- `user_id`: Tickblaze Manager -> Users\n- `account_id`: Tickblaze Manager -> Accounts \n"
+        "description": "Ignite API provides public endpoints for prop firm operations, including authentication, users, trading accounts, entitlements, account activity, withdrawals, and service status.\n\nAuthentication uses short-lived session tokens that expire after 3 hours.\n\nSend the token with every request using the `Authorization` header:\n\n```\nAuthorization: Token <token>\n```\n\nExample:\n\n```\nAuthorization: Token 123abc456def789\n```\n\nTo obtain a token, call `POST /auth/login/` with valid credentials. The response includes a `key` value. Use that value in the header above for subsequent API calls.\n\nHow to find required IDs:\n\n- `challenge_id`: Prop Tech Configuration -> Challenges\n- `user_id`: Tickblaze Manager -> Users\n- `account_id`: Tickblaze Manager -> Accounts\n"
     },
     "paths": {
         "/api/accounts/": {
@@ -7979,8 +7979,43 @@
     },
     "tags": [
         {
+            "name": "Auth",
+            "description": "Authenticate users and inspect token context.",
+            "x-displayName": "Authentication"
+        },
+        {
+            "name": "Accounts",
+            "description": "Create, inspect, deactivate, reactivate, and summarize trading accounts.",
+            "x-displayName": "Accounts"
+        },
+        {
+            "name": "Users",
+            "description": "Manage users, memberships, notes, account statistics, and user status.",
+            "x-displayName": "Users"
+        },
+        {
+            "name": "Entitlements",
+            "description": "Review and update market data entitlements for users.",
+            "x-displayName": "Entitlements"
+        },
+        {
+            "name": "Trade",
+            "description": "Inspect trade positions and submit position close requests.",
+            "x-displayName": "Trade"
+        },
+        {
+            "name": "Challenge",
+            "description": "Retrieve challenge configuration used when creating trading accounts.",
+            "x-displayName": "Challenges"
+        },
+        {
+            "name": "Status",
+            "description": "Check API health and maintenance status.",
+            "x-displayName": "Status"
+        },
+        {
             "name": "withdrawals",
-            "description": "Withdrawal related endpoints",
+            "description": "Request withdrawals and inspect withdrawal-related account details.",
             "x-displayName": "Withdrawals"
         }
     ]
