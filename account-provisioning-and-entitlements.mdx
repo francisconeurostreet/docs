@@ -1,0 +1,86 @@
+---
+title: "Account provisioning and entitlements"
+description: "Create users, create accounts, and activate required market data access."
+---
+
+Creating a trading account does not automatically activate market data.
+
+After account creation, the user may have `PENDING` entitlements. Your integration must authorize the entitlements the user should receive.
+
+<Warning>
+  If you create the account but skip entitlement authorization, the user can remain eligible for market data but not receive active data access, meaning they cannot trade or see live market data. Always include entitlement authorization in your account provisioning flow.
+</Warning>
+
+## Recommended flow
+
+<Steps>
+  <Step title="Create or confirm the user">
+    Create the user before creating an account for them.
+
+    ```http
+    POST /api/users/
+    ```
+
+    Store the returned `user_id`. You will use that value when creating the account and when authorizing the user's entitlements.
+  </Step>
+
+  <Step title="Create the trading account">
+    Create the account against the correct challenge using the `user_id` from the user creation response.
+
+    ```http
+    POST /api/accounts/
+    ```
+
+    Store the returned `account_id` for later account operations and support lookups. Account creation may create `PENDING` entitlement rows based on the challenge configuration.
+  </Step>
+
+  <Step title="Inspect required entitlements">
+    Read the user's entitlement rows after account creation using the stored `user_id`.
+
+    ```http
+    GET /api/entitlements/user-entitlements/{user_id}/
+    ```
+
+    Use this response to find the exact `entitlement` and `level` values to send in the payload to authorize the individual entitlement returned by the API.
+  </Step>
+
+  <Step title="Authorize each required entitlement">
+    Authorize each exchange entitlement the user should receive.
+
+    ```http
+    PATCH /api/users/{user_id}/entitlements/
+    ```
+  </Step>
+</Steps>
+
+## Example authorization request
+
+```json
+{
+  "entitlement": "CBOT",
+  "level": "l1",
+  "status": "AUTHORIZED"
+}
+```
+
+A successful authorization returns `204 No Content`.
+
+## Status values
+
+| Status | Meaning |
+| --- | --- |
+| `PENDING` | Eligible, but not active. The user does not receive market data yet. |
+| `AUTHORIZED` | Active access for the entitlement row. |
+| `REVOKED` | Access removed. |
+
+## Integration guidance
+
+- Make entitlement authorization part of your account creation workflow.
+- Make one authorization call per entitlement row the user should receive.
+- Authorization is firm-specific. Each firm manages its own users independently.
+- Re-authorizing an already authorized entitlement is safe and will not create a new side effect.
+- You can revoke access later by sending `status: "REVOKED"`.
+
+<Tip>
+  For endpoint schemas and response details, use the API reference tab.
+</Tip>

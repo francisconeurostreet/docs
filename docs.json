@@ -17,7 +17,26 @@
             "group": "Get started",
             "pages": [
               "index",
-              "quickstart",
+              "urls-and-credentials",
+              "quickstart"
+            ]
+          },
+          {
+            "group": "Firm onboarding",
+            "pages": [
+              "configure-your-firm",
+              "account-provisioning-and-entitlements"
+            ]
+          },
+          {
+            "group": "Integrations",
+            "pages": [
+              "sqs-integration"
+            ]
+          },
+          {
+            "group": "Operations",
+            "pages": [
               "deployment-window",
               "changelog"
             ]

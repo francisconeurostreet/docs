@@ -5,15 +5,19 @@ description: "Authenticate with Ignite API and make your first request."
 
 This guide shows the minimum flow for calling Ignite API.
 
-Use `{BASE_URL}` as the environment URL provided by Ignite.
+Use `{BASE_URL}` as the firm host provided during onboarding. Dashboard pages use root-level paths on that host, while most API endpoints are prefixed with `/api/`. The login endpoint is `/auth/login/`.
 
 ## Prerequisites
 
 Before you begin, you must have:
 
 - An Ignite user account with API access.
-- The correct `{BASE_URL}` for your environment.
+- The correct `{BASE_URL}` for your firm.
 - The email and password for the account you want to authenticate.
+
+<Tip>
+  If you do not have your firm slug or `{BASE_URL}` yet, start with [URLs and credentials](/urls-and-credentials).
+</Tip>
 
 ## Authenticate
 
@@ -70,5 +74,5 @@ Some endpoints require IDs from Ignite operational views:
 - `account_id`: Tickblaze Manager -> Accounts
 
 <Tip>
-  Browse the [API reference](/api-reference) for endpoint-specific request bodies, response schemas, and examples.
+  After authentication, review [account provisioning and entitlements](/account-provisioning-and-entitlements) before automating account creation. Market data access requires an explicit entitlement authorization step.
 </Tip>

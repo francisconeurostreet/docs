@@ -1,9 +1,9 @@
 {
     "openapi": "3.0.3",
     "info": {
-        "title": "Ignite API",
+        "title": "TBBO API",
         "version": "1.0.0",
-        "description": "Ignite API provides public endpoints for prop firm operations, including authentication, users, trading accounts, entitlements, account activity, withdrawals, and service status.\n\nAuthentication uses short-lived session tokens that expire after 3 hours.\n\nSend the token with every request using the `Authorization` header:\n\n```\nAuthorization: Token <token>\n```\n\nExample:\n\n```\nAuthorization: Token 123abc456def789\n```\n\nTo obtain a token, call `POST /auth/login/` with valid credentials. The response includes a `key` value. Use that value in the header above for subsequent API calls.\n\nHow to find required IDs:\n\n- `challenge_id`: Prop Tech Configuration -> Challenges\n- `user_id`: Tickblaze Manager -> Users\n- `account_id`: Tickblaze Manager -> Accounts\n"
+        "description": "Authentication uses short-lived session tokens (3 hours).\n\nSend the token with every request using the `Authorization` header:\n\n```\nAuthorization: Token <token>\n```\n\nExample:\n\n```\nAuthorization: Token 123abc456def789\n```\n\nTo obtain a token, call `POST /auth/login/` with valid credentials. The response includes a `key` value. Use that value in the header above for subsequent API calls.\n\nHow to find required IDs:\n\n- `challenge_id`: Prop Tech Configuration -> Challenges\n- `user_id`: Tickblaze Manager -> Users\n- `account_id`: Tickblaze Manager -> Accounts \n"
     },
     "paths": {
         "/api/accounts/": {
@@ -2998,243 +2998,6 @@
                 }
             }
         },
-        "/api/users/{id}/membership/": {
-            "get": {
-                "operationId": "api_users_membership_retrieve",
-                "description": "Return the user's active-firm role and firm permission groups.",
-                "summary": "Retrieve user membership",
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "id",
-                        "schema": {
-                            "type": "integer"
-                        },
-                        "description": "A unique integer value identifying this user.",
-                        "required": true
-                    }
-                ],
-                "tags": [
-                    "Users"
-                ],
-                "security": [
-                    {
-                        "tokenAuth": []
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/UserMembership"
-                                }
-                            }
-                        },
-                        "description": ""
-                    }
-                }
-            },
-            "patch": {
-                "operationId": "api_users_membership_partial_update",
-                "description": "Update active-firm role settings and firm permission group assignments. `firm_group_ids` is a full replacement for groups in the active Prop Firm. Global-scope access is an internal system-firm control and is not managed by this endpoint.",
-                "summary": "Update user membership",
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "id",
-                        "schema": {
-                            "type": "integer"
-                        },
-                        "description": "A unique integer value identifying this user.",
-                        "required": true
-                    }
-                ],
-                "tags": [
-                    "Users"
-                ],
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/PatchedUserMembershipUpdate"
-                            },
-                            "examples": {
-                                "MembershipUpdate": {
-                                    "value": {
-                                        "role": "staff",
-                                        "firm_group_ids": [
-                                            1,
-                                            2
-                                        ]
-                                    },
-                                    "summary": "Membership update"
-                                }
-                            }
-                        },
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/PatchedUserMembershipUpdate"
-                            }
-                        },
-                        "multipart/form-data": {
-                            "schema": {
-                                "$ref": "#/components/schemas/PatchedUserMembershipUpdate"
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "tokenAuth": []
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/UserMembership"
-                                }
-                            }
-                        },
-                        "description": ""
-                    },
-                    "403": {
-                        "description": "Membership-management permission is required."
-                    }
-                }
-            }
-        },
-        "/api/users/{id}/notes/": {
-            "get": {
-                "operationId": "api_users_notes_retrieve",
-                "description": "Returns the current internal note for the requested user within the active Prop Firm. Only authenticated firm staff and firm admins may access this endpoint.",
-                "summary": "Get user internal note",
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "id",
-                        "schema": {
-                            "type": "integer"
-                        },
-                        "description": "A unique integer value identifying this user.",
-                        "required": true
-                    }
-                ],
-                "tags": [
-                    "Users"
-                ],
-                "security": [
-                    {
-                        "tokenAuth": []
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/UserMembershipNoteResponse"
-                                },
-                                "examples": {
-                                    "CurrentUserNote": {
-                                        "value": {
-                                            "user_id": 42,
-                                            "body": "Manual review completed for this Prop Firm only.",
-                                            "updated_by": {
-                                                "id": 7,
-                                                "email": "ops@example.com",
-                                                "full_name": "Ops Admin"
-                                            },
-                                            "updated_at": "2026-04-13T15:04:05Z"
-                                        },
-                                        "summary": "Current user note"
-                                    }
-                                }
-                            }
-                        },
-                        "description": ""
-                    },
-                    "403": {
-                        "description": "Only authenticated firm staff and firm admins may access this endpoint."
-                    },
-                    "404": {
-                        "description": "User not found."
-                    }
-                }
-            },
-            "post": {
-                "operationId": "api_users_notes_create",
-                "description": "Replaces the current internal note for the requested user within the active Prop Firm. Only authenticated firm staff and firm admins may access this endpoint.",
-                "summary": "Update user internal note",
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "id",
-                        "schema": {
-                            "type": "integer"
-                        },
-                        "description": "A unique integer value identifying this user.",
-                        "required": true
-                    }
-                ],
-                "tags": [
-                    "Users"
-                ],
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/UserMembershipNoteRequest"
-                            },
-                            "examples": {
-                                "UpdateUserNoteRequest": {
-                                    "value": {
-                                        "body": "Flagged for closer payout review in this Prop Firm only."
-                                    },
-                                    "summary": "Update user note request"
-                                }
-                            }
-                        },
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/UserMembershipNoteRequest"
-                            }
-                        },
-                        "multipart/form-data": {
-                            "schema": {
-                                "$ref": "#/components/schemas/UserMembershipNoteRequest"
-                            }
-                        }
-                    },
-                    "required": true
-                },
-                "security": [
-                    {
-                        "tokenAuth": []
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/UserMembershipNoteResponse"
-                                }
-                            }
-                        },
-                        "description": ""
-                    },
-                    "403": {
-                        "description": "Only authenticated firm staff and firm admins may access this endpoint."
-                    },
-                    "404": {
-                        "description": "User not found."
-                    }
-                }
-            }
-        },
         "/api/users/{id}/reactivate/": {
             "post": {
                 "operationId": "api_users_reactivate_create",
@@ -3396,88 +3159,6 @@
                 }
             }
         },
-        "/api/users/deduplication/": {
-            "post": {
-                "operationId": "api_users_deduplication_create",
-                "description": "Initiate account deduplication for two email addresses. The endpoint only rejects invalid input or requests where neither email belongs to the active firm. In every other case it sends verification links to both email addresses and only groups records after both are verified.",
-                "summary": "Start a cross-email deduplication flow",
-                "tags": [
-                    "Users"
-                ],
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/UserDeduplicationRequest"
-                            }
-                        },
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/UserDeduplicationRequest"
-                            }
-                        },
-                        "multipart/form-data": {
-                            "schema": {
-                                "$ref": "#/components/schemas/UserDeduplicationRequest"
-                            }
-                        }
-                    },
-                    "required": true
-                },
-                "security": [
-                    {
-                        "tokenAuth": []
-                    }
-                ],
-                "responses": {
-                    "202": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/UserDeduplicationResponse"
-                                }
-                            }
-                        },
-                        "description": ""
-                    }
-                }
-            }
-        },
-        "/api/users/deduplication/verify/": {
-            "get": {
-                "operationId": "api_users_deduplication_verify_retrieve",
-                "description": "Complete one side of the email-ownership flow for account deduplication. Once both emails are verified, the backend groups the matching user records inside one transaction.",
-                "summary": "Verify one email for a deduplication request",
-                "parameters": [
-                    {
-                        "in": "query",
-                        "name": "token",
-                        "schema": {
-                            "type": "string"
-                        },
-                        "required": true
-                    }
-                ],
-                "tags": [
-                    "Users"
-                ],
-                "security": [
-                    {}
-                ],
-                "responses": {
-                    "200": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/UserDeduplicationResponse"
-                                }
-                            }
-                        },
-                        "description": ""
-                    }
-                }
-            }
-        },
         "/api/users/entitlements/": {
             "get": {
                 "operationId": "api_users_entitlements_retrieve",
@@ -3515,33 +3196,6 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/PaginatedUserVenueTradingFlagList"
-                                }
-                            }
-                        },
-                        "description": ""
-                    }
-                }
-            }
-        },
-        "/api/users/role-options/": {
-            "get": {
-                "operationId": "api_users_role_options_retrieve",
-                "description": "Return allowed membership roles, assignable firm groups, permission templates, and product capabilities that can be assigned through firm permission groups.",
-                "summary": "List user role options",
-                "tags": [
-                    "Users"
-                ],
-                "security": [
-                    {
-                        "tokenAuth": []
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/UserRoleOptions"
                                 }
                             }
                         },
@@ -3849,87 +3503,10 @@
                     }
                 }
             }
-        },
-        "/auth/token/context/": {
-            "post": {
-                "operationId": "auth_token_context_create",
-                "description": "Returns the Prop Firm routing metadata bound to a valid session token. Use this when a client has a token but does not know which firm host issued it.",
-                "summary": "Resolve token routing context",
-                "tags": [
-                    "Auth"
-                ],
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/TokenContextRequest"
-                            }
-                        },
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/TokenContextRequest"
-                            }
-                        },
-                        "multipart/form-data": {
-                            "schema": {
-                                "$ref": "#/components/schemas/TokenContextRequest"
-                            }
-                        }
-                    },
-                    "required": true
-                },
-                "security": [
-                    {}
-                ],
-                "responses": {
-                    "200": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/TokenContextResponse"
-                                },
-                                "examples": {
-                                    "TokenContext": {
-                                        "value": {
-                                            "is_valid": true,
-                                            "prop_firm": "firm-demo",
-                                            "prop_firm_host": "firm-demo.admin.example.com",
-                                            "prop_firms": [
-                                                "firm-demo",
-                                                "partner-firm"
-                                            ]
-                                        },
-                                        "summary": "Token context"
-                                    }
-                                }
-                            }
-                        },
-                        "description": "Token context resolved."
-                    },
-                    "401": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/DetailResponse"
-                                }
-                            }
-                        },
-                        "description": "Token is invalid, expired, not a session token, or no longer has firm access."
-                    }
-                }
-            }
         }
     },
     "components": {
         "schemas": {
-            "AccessEnum": {
-                "enum": [
-                    "read",
-                    "write"
-                ],
-                "type": "string",
-                "description": "* `read` - Read\n* `write` - Write"
-            },
             "AccountBalanceEquity": {
                 "type": "object",
                 "properties": {
@@ -5417,34 +4994,6 @@
                     "detail"
                 ]
             },
-            "FirmPermissionGroupSummary": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "integer",
-                        "readOnly": true
-                    },
-                    "name": {
-                        "type": "string",
-                        "readOnly": true
-                    },
-                    "description": {
-                        "type": "string",
-                        "readOnly": true
-                    },
-                    "capability_keys": {
-                        "type": "string",
-                        "readOnly": true,
-                        "description": "Product capability keys assigned to this firm group."
-                    }
-                },
-                "required": [
-                    "capability_keys",
-                    "description",
-                    "id",
-                    "name"
-                ]
-            },
             "FirmScopedLogin": {
                 "type": "object",
                 "properties": {
@@ -6632,27 +6181,6 @@
                     }
                 }
             },
-            "PatchedUserMembershipUpdate": {
-                "type": "object",
-                "properties": {
-                    "role": {
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/RoleEnum"
-                            }
-                        ],
-                        "description": "Membership role in the active Prop Firm.\n\n* `trader` - Trader\n* `staff` - Staff\n* `admin` - Admin"
-                    },
-                    "firm_group_ids": {
-                        "type": "array",
-                        "items": {
-                            "type": "integer",
-                            "minimum": 1
-                        },
-                        "description": "Full replacement list of firm permission group ids."
-                    }
-                }
-            },
             "PayoutFrequencyEnum": {
                 "enum": [
                     30,
@@ -6668,34 +6196,6 @@
                 ],
                 "type": "integer",
                 "description": "* `30` - Monthly\n* `14` - Bi-Weekly\n* `7` - Weekly\n* `10` - Every 10 days\n* `3` - Every 3 days\n* `5` - Every 5 days\n* `-1` - Triple Payout\n* `21` - Every 21 days\n* `28` - Every 28 days\n* `1` - Daily"
-            },
-            "PermissionTemplate": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "integer",
-                        "readOnly": true
-                    },
-                    "name": {
-                        "type": "string",
-                        "readOnly": true
-                    },
-                    "description": {
-                        "type": "string",
-                        "readOnly": true
-                    },
-                    "capability_keys": {
-                        "type": "string",
-                        "readOnly": true,
-                        "description": "Product capability keys copied into firm groups created from this template."
-                    }
-                },
-                "required": [
-                    "capability_keys",
-                    "description",
-                    "id",
-                    "name"
-                ]
             },
             "PhaseShallow": {
                 "type": "object",
@@ -7049,60 +6549,6 @@
                 "type": "string",
                 "description": "* `accepted` - Accepted\n* `declined` - Declined\n* `pending` - Pending\n* `cancelled` - Cancelled"
             },
-            "ProductCapability": {
-                "type": "object",
-                "properties": {
-                    "key": {
-                        "type": "string",
-                        "readOnly": true,
-                        "description": "Stable product capability key."
-                    },
-                    "label": {
-                        "type": "string",
-                        "readOnly": true,
-                        "description": "Human-readable capability label."
-                    },
-                    "description": {
-                        "type": "string",
-                        "readOnly": true,
-                        "description": "Client-facing capability description."
-                    },
-                    "category": {
-                        "type": "string",
-                        "readOnly": true,
-                        "description": "Capability category used by role-management screens."
-                    },
-                    "access": {
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/AccessEnum"
-                            }
-                        ],
-                        "readOnly": true,
-                        "description": "Whether this capability is read-only or mutation-capable.\n\n* `read` - Read\n* `write` - Write"
-                    },
-                    "tab": {
-                        "type": "string",
-                        "readOnly": true,
-                        "nullable": true,
-                        "description": "Sidebar tab associated with this capability, when applicable."
-                    },
-                    "assignable": {
-                        "type": "boolean",
-                        "readOnly": true,
-                        "description": "True when this capability may be assigned through firm permission groups."
-                    }
-                },
-                "required": [
-                    "access",
-                    "assignable",
-                    "category",
-                    "description",
-                    "key",
-                    "label",
-                    "tab"
-                ]
-            },
             "PublicWithdrawal": {
                 "type": "object",
                 "properties": {
@@ -7185,15 +6631,6 @@
                 ],
                 "type": "string",
                 "description": "* `not_reconciled` - Not reconciled\n* `original_superseded` - Original superseded\n* `replacement_account` - Replacement account"
-            },
-            "RoleEnum": {
-                "enum": [
-                    "trader",
-                    "staff",
-                    "admin"
-                ],
-                "type": "string",
-                "description": "* `trader` - Trader\n* `staff` - Staff\n* `admin` - Admin"
             },
             "ScheduledOutage": {
                 "type": "object",
@@ -7348,49 +6785,6 @@
                     "detail"
                 ]
             },
-            "TokenContextRequest": {
-                "type": "object",
-                "properties": {
-                    "token": {
-                        "type": "string",
-                        "description": "Issued session token to inspect for routing context."
-                    }
-                },
-                "required": [
-                    "token"
-                ]
-            },
-            "TokenContextResponse": {
-                "type": "object",
-                "properties": {
-                    "is_valid": {
-                        "type": "boolean",
-                        "description": "Whether the submitted token is currently valid."
-                    },
-                    "prop_firm": {
-                        "type": "string",
-                        "description": "Prop Firm slug bound to the issued session token."
-                    },
-                    "prop_firm_host": {
-                        "type": "string",
-                        "nullable": true,
-                        "description": "Primary host for the token-bound Prop Firm, when configured."
-                    },
-                    "prop_firms": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "description": "All active Prop Firm slugs the token user currently belongs to."
-                    }
-                },
-                "required": [
-                    "is_valid",
-                    "prop_firm",
-                    "prop_firm_host",
-                    "prop_firms"
-                ]
-            },
             "TokenEntitlementsResponse": {
                 "type": "object",
                 "properties": {
@@ -7516,36 +6910,6 @@
                     }
                 }
             },
-            "UserDeduplicationRequest": {
-                "type": "object",
-                "properties": {
-                    "first_email": {
-                        "type": "string",
-                        "format": "email",
-                        "maxLength": 200
-                    },
-                    "second_email": {
-                        "type": "string",
-                        "format": "email",
-                        "maxLength": 200
-                    }
-                },
-                "required": [
-                    "first_email",
-                    "second_email"
-                ]
-            },
-            "UserDeduplicationResponse": {
-                "type": "object",
-                "properties": {
-                    "message": {
-                        "type": "string"
-                    }
-                },
-                "required": [
-                    "message"
-                ]
-            },
             "UserEntitlementStatusUpdateStatusEnum": {
                 "enum": [
                     "PENDING",
@@ -7554,113 +6918,6 @@
                 ],
                 "type": "string",
                 "description": "* `PENDING` - Pending Authorization\n* `AUTHORIZED` - Authorized\n* `REVOKED` - Revoked"
-            },
-            "UserMembership": {
-                "type": "object",
-                "properties": {
-                    "user_id": {
-                        "type": "integer",
-                        "readOnly": true
-                    },
-                    "role": {
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/RoleEnum"
-                            }
-                        ],
-                        "readOnly": true
-                    },
-                    "is_active": {
-                        "type": "boolean",
-                        "readOnly": true
-                    },
-                    "is_disabled": {
-                        "type": "boolean",
-                        "readOnly": true
-                    },
-                    "firm_groups": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/FirmPermissionGroupSummary"
-                        },
-                        "readOnly": true
-                    }
-                },
-                "required": [
-                    "firm_groups",
-                    "is_active",
-                    "is_disabled",
-                    "role",
-                    "user_id"
-                ]
-            },
-            "UserMembershipNoteActor": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "email": {
-                        "type": "string",
-                        "format": "email"
-                    },
-                    "full_name": {
-                        "type": "string"
-                    }
-                },
-                "required": [
-                    "email",
-                    "full_name",
-                    "id"
-                ]
-            },
-            "UserMembershipNoteRequest": {
-                "type": "object",
-                "properties": {
-                    "body": {
-                        "type": "string",
-                        "nullable": true,
-                        "description": "Internal note for this user within the active Prop Firm. Send `null` or an empty string to clear it."
-                    }
-                },
-                "required": [
-                    "body"
-                ]
-            },
-            "UserMembershipNoteResponse": {
-                "type": "object",
-                "properties": {
-                    "user_id": {
-                        "type": "integer",
-                        "description": "Trader user id within the active Prop Firm."
-                    },
-                    "body": {
-                        "type": "string",
-                        "nullable": true,
-                        "description": "Current internal note for this user within the active Prop Firm."
-                    },
-                    "updated_by": {
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/UserMembershipNoteActor"
-                            }
-                        ],
-                        "nullable": true,
-                        "description": "Staff or admin user who last changed the internal note."
-                    },
-                    "updated_at": {
-                        "type": "string",
-                        "format": "date-time",
-                        "nullable": true,
-                        "description": "Timestamp when the internal note was last updated."
-                    }
-                },
-                "required": [
-                    "body",
-                    "updated_at",
-                    "updated_by",
-                    "user_id"
-                ]
             },
             "UserReactivationRequest": {
                 "type": "object",
@@ -7672,46 +6929,6 @@
                 },
                 "required": [
                     "reason"
-                ]
-            },
-            "UserRoleOptions": {
-                "type": "object",
-                "properties": {
-                    "roles": {
-                        "type": "array",
-                        "items": {
-                            "type": "object",
-                            "additionalProperties": {}
-                        },
-                        "readOnly": true
-                    },
-                    "permission_groups": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/FirmPermissionGroupSummary"
-                        },
-                        "readOnly": true
-                    },
-                    "permission_templates": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/PermissionTemplate"
-                        },
-                        "readOnly": true
-                    },
-                    "capabilities": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/ProductCapability"
-                        },
-                        "readOnly": true
-                    }
-                },
-                "required": [
-                    "capabilities",
-                    "permission_groups",
-                    "permission_templates",
-                    "roles"
                 ]
             },
             "UserShallow": {
@@ -7979,43 +7196,8 @@
     },
     "tags": [
         {
-            "name": "Auth",
-            "description": "Authenticate users and inspect token context.",
-            "x-displayName": "Authentication"
-        },
-        {
-            "name": "Accounts",
-            "description": "Create, inspect, deactivate, reactivate, and summarize trading accounts.",
-            "x-displayName": "Accounts"
-        },
-        {
-            "name": "Users",
-            "description": "Manage users, memberships, notes, account statistics, and user status.",
-            "x-displayName": "Users"
-        },
-        {
-            "name": "Entitlements",
-            "description": "Review and update market data entitlements for users.",
-            "x-displayName": "Entitlements"
-        },
-        {
-            "name": "Trade",
-            "description": "Inspect trade positions and submit position close requests.",
-            "x-displayName": "Trade"
-        },
-        {
-            "name": "Challenge",
-            "description": "Retrieve challenge configuration used when creating trading accounts.",
-            "x-displayName": "Challenges"
-        },
-        {
-            "name": "Status",
-            "description": "Check API health and maintenance status.",
-            "x-displayName": "Status"
-        },
-        {
             "name": "withdrawals",
-            "description": "Request withdrawals and inspect withdrawal-related account details.",
+            "description": "Withdrawal related endpoints",
             "x-displayName": "Withdrawals"
         }
     ]
