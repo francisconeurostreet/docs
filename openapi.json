@@ -45,10 +45,10 @@
                                         ],
                                         "max_open_positions": 10,
                                         "max_contracts": 5,
-                                        "notes": "VIP client - expedited approval requested"
+                                        "notes": "Priority review requested"
                                     },
                                     "summary": "Create an account with an explicit balance override",
-                                    "description": "Example with custom symbols, position limits. notes and override of the challenge default starting balance."
+                                    "description": "Example with custom symbols, position limits, notes, and an explicit starting balance."
                                 },
                                 "SpecificPhaseTradingAccount": {
                                     "value": {
@@ -107,7 +107,7 @@
                                                     "account_id": 282,
                                                     "user_id": 50,
                                                     "prop_firm_id": "08dfcf0b-005f-4e6a-84fc-d0348ed66a4e",
-                                                    "prop_firm_slug": "tickblaze",
+                                                    "prop_firm_slug": "firm-demo",
                                                     "challenge_id": 1,
                                                     "challenge_short_code": "001122",
                                                     "account_name": "John Doe - 50K Challenge",
@@ -184,7 +184,7 @@
                                             "account_type": "FUNDED",
                                             "user_id": 5678,
                                             "prop_firm_id": "507ede8b-951d-4c38-877a-f242463ce14f",
-                                            "prop_firm_name": "Tickblaze Capital",
+                                            "prop_firm_name": "Example Firm",
                                             "challenge_title": "2-Step Challenge",
                                             "challenge_short_code": "001122",
                                             "auto_liquidate_triggered_timestamp": null,
@@ -274,7 +274,7 @@
         "/api/accounts/{id}/deactivate/": {
             "patch": {
                 "operationId": "api_accounts_deactivate_partial_update",
-                "description": "Deactivate an account with a reason and optionally submit OMS close-position requests.",
+                "description": "Deactivate a trading account with a reason and, when requested, submit close-position requests for its open positions.",
                 "summary": "Deactivate a trading account",
                 "parameters": [
                     {
@@ -310,7 +310,7 @@
                                         "close_positions": true
                                     },
                                     "summary": "Deactivate account and submit close-position requests",
-                                    "description": "Example of deactivating an account and submitting OMS close-position requests"
+                                    "description": "Example of deactivating an account and submitting close-position requests"
                                 },
                                 "DeactivateForRuleViolation": {
                                     "value": {
@@ -438,7 +438,7 @@
                                             "duration_ms": 78
                                         },
                                         "summary": "Successful deactivation with close requests submitted",
-                                        "description": "Response when account is deactivated and all required OMS close-position requests were accepted"
+                                        "description": "Response when the account is deactivated and all required close-position requests were accepted"
                                     }
                                 }
                             }
@@ -639,7 +639,7 @@
                                         "amount": 25000.0
                                     },
                                     "summary": "Set balance for multiple accounts",
-                                    "description": "Sets the balance of all provided accounts to the exact same value. This replaces the previous update balance endpoint."
+                                    "description": "Sets the balance of all provided accounts to the exact same value. Use this operation to set each provided account to the same balance."
                                 }
                             }
                         },
@@ -763,7 +763,7 @@
         "/api/accounts/balance-equity/": {
             "get": {
                 "operationId": "api_accounts_balance_equity_list",
-                "description": "Returns paginated account rows for end-of-day reporting pipelines. By default returns only ACTIVE accounts to preserve backwards compatibility; pass `?status=FAILED`, any other AccountStatusChoices value, or `?status=all` to broaden the result set. Combine with `?disabled_at_after=` and `?disabled_at_before=` to scope results to a window of when the account entered its terminal state (max window: 31 days; useful for daily failed-account roll-ups). Staff users see all accessible accounts; regular users see only their own.",
+                "description": "Returns paginated accounts for end-of-day reporting. By default, returns only `ACTIVE` accounts. Pass `?status=FAILED`, another AccountStatusChoices value, or `?status=all` to broaden the result set. Combine with `?disabled_at_after=` and `?disabled_at_before=` to scope results to a window of when the account entered its terminal state (max window: 31 days; useful for daily failed-account roll-ups). Staff users see all accessible accounts; regular users see only their own.",
                 "summary": "Get balance, equity and reporting fields for accounts",
                 "parameters": [
                     {
@@ -848,7 +848,7 @@
                                                 "total_pages": 7,
                                                 "has_next": true,
                                                 "has_previous": false,
-                                                "next": "http://api.example.org/accounts/?page=2",
+                                                "next": "https://api.example.org/resources/?page=2",
                                                 "previous": null
                                             },
                                             "results": [
@@ -869,7 +869,7 @@
                                                 }
                                             ]
                                         },
-                                        "summary": "Active account row",
+                                        "summary": "Active account response",
                                         "description": "Default response shape for an ACTIVE account."
                                     },
                                     "SuccessResponse-FailedAccount": {
@@ -881,7 +881,7 @@
                                                 "total_pages": 7,
                                                 "has_next": true,
                                                 "has_previous": false,
-                                                "next": "http://api.example.org/accounts/?page=2",
+                                                "next": "https://api.example.org/resources/?page=2",
                                                 "previous": null
                                             },
                                             "results": [
@@ -902,7 +902,7 @@
                                                 }
                                             ]
                                         },
-                                        "summary": "Soft-breached account row",
+                                        "summary": "Soft-breached account response",
                                         "description": "Returned when filtering with `?status=FAILED` (or `?status=all`). `status_reason` carries the enum needed to detect a daily-loss-limit soft breach without an extra per-account call."
                                     },
                                     "SuccessResponse-Empty": {
@@ -914,7 +914,7 @@
                                                 "total_pages": 7,
                                                 "has_next": true,
                                                 "has_previous": false,
-                                                "next": "http://api.example.org/accounts/?page=2",
+                                                "next": "https://api.example.org/resources/?page=2",
                                                 "previous": null
                                             },
                                             "results": [
@@ -998,7 +998,7 @@
                                                 "total_pages": 7,
                                                 "has_next": true,
                                                 "has_previous": false,
-                                                "next": "http://api.example.org/accounts/?page=2",
+                                                "next": "https://api.example.org/resources/?page=2",
                                                 "previous": null
                                             },
                                             "results": [
@@ -1133,7 +1133,7 @@
         "/api/accounts/status/": {
             "patch": {
                 "operationId": "api_accounts_status_partial_update",
-                "description": "Bulk updates the account status for every account in `account_ids`, persists the optional `custom_status_reason`, and propagates the changes.Returns a payload summarizing how many account statuses changed.",
+                "description": "Updates the account status for every account in `account_ids` and stores the optional `custom_status_reason`. Returns a payload summarizing how many account statuses changed.",
                 "summary": "Update trading account statuses",
                 "tags": [
                     "Accounts"
@@ -1201,7 +1201,7 @@
         "/api/accounts/summary/": {
             "get": {
                 "operationId": "api_accounts_summary_list",
-                "description": "Returns a paginated list of accounts with the fields and related objects you request. Designed for reporting workflows that previously needed multiple calls to assemble: account financials, status, closed-position counts, owner/firm details, and recent closed positions can all be fetched in one paginated response.\n\n**What you can request:**\n- Account fields: `account_id`, `balance`, `equity`, `status`, `status_reason`, `closed_pnl_today`, `initial_balance`, `trading_days`, `broker_type`, `disabled_at`, and more.\n- Per-account counts: `long_positions_count`, `short_positions_count` (closed positions, by direction). Counts are all-time by default; use `position_counts_closed_at_after` / `position_counts_closed_at_before` to scope only those count fields to an inclusive close-time window.\n- Related objects, one level deep: `user`, `phase`.\n- Up to 10 most-recently-closed positions per account: `closed_positions`.\n\n**Filtering rows:** use `?status=` to filter by account status. Defaults to `ACTIVE`. Accepts any account status value (e.g. `FAILED`, `BLOCKED`) or `all` to disable filtering. Count-window params do not filter account rows; accounts with no matching closed positions return zero counts.\n\n**Shaping the response:** use `?query=` to list the exact fields you want. See the `query` parameter for syntax and examples. Asking for fewer fields makes the response smaller and faster; fields you don't request never appear in the response.\n\n**Permissions:** staff users see all accounts in their firm; regular users see only their own accounts. Accounts and related data are always scoped to your active firm — the response never includes data from other firms.",
+                "description": "Returns paginated accounts with optional field selection through `query`. Callers can request account fields, `user` and `phase` objects, position counts, and up to 10 recent closed positions per account. `status` filters accounts and defaults to `ACTIVE`; use `all` to disable that filter. `position_counts_closed_at_after` and `position_counts_closed_at_before` limit only the position count fields, not the returned accounts. Staff users see accessible firm accounts; regular users see only their own.",
                 "summary": "List accounts with optional field selection and nested objects",
                 "parameters": [
                     {
@@ -1372,7 +1372,7 @@
                             "type": "string",
                             "format": "date-time"
                         },
-                        "description": "Scope `long_positions_count` and `short_positions_count` to closed positions with close timestamps at or after this ISO 8601 datetime. This changes only those count fields; it does not change which account rows are returned. Counts are all-time when this and `position_counts_closed_at_before` are omitted.",
+                        "description": "Scope `long_positions_count` and `short_positions_count` to closed positions with close timestamps at or after this ISO 8601 datetime. This changes only those count fields; it does not change which accounts are returned. Counts are all-time when this and `position_counts_closed_at_before` are omitted.",
                         "examples": {
                             "TradingSessionStart": {
                                 "value": "2026-05-03T13:30:00Z",
@@ -1520,7 +1520,7 @@
                                                 "total_pages": 7,
                                                 "has_next": true,
                                                 "has_previous": false,
-                                                "next": "http://api.example.org/accounts/?page=2",
+                                                "next": "https://api.example.org/resources/?page=2",
                                                 "previous": null
                                             },
                                             "results": [
@@ -1543,7 +1543,7 @@
                                                 "total_pages": 7,
                                                 "has_next": true,
                                                 "has_previous": false,
-                                                "next": "http://api.example.org/accounts/?page=2",
+                                                "next": "https://api.example.org/resources/?page=2",
                                                 "previous": null
                                             },
                                             "results": [
@@ -1577,7 +1577,7 @@
                                                 "total_pages": 7,
                                                 "has_next": true,
                                                 "has_previous": false,
-                                                "next": "http://api.example.org/accounts/?page=2",
+                                                "next": "https://api.example.org/resources/?page=2",
                                                 "previous": null
                                             },
                                             "results": [
@@ -1612,7 +1612,7 @@
                                                 "total_pages": 7,
                                                 "has_next": true,
                                                 "has_previous": false,
-                                                "next": "http://api.example.org/accounts/?page=2",
+                                                "next": "https://api.example.org/resources/?page=2",
                                                 "previous": null
                                             },
                                             "results": [
@@ -1655,7 +1655,7 @@
                                                 "total_pages": 7,
                                                 "has_next": true,
                                                 "has_previous": false,
-                                                "next": "http://api.example.org/accounts/?page=2",
+                                                "next": "https://api.example.org/resources/?page=2",
                                                 "previous": null
                                             },
                                             "results": [
@@ -1676,7 +1676,7 @@
         "/api/challenges/": {
             "get": {
                 "operationId": "api_challenges_list",
-                "description": "Returns all challenge details with nested phases and configured symbols.",
+                "description": "Returns a paginated list of Challenges for your firm, including nested phases, allowed exchange limits, and individual symbol limits.",
                 "summary": "List Challenges",
                 "parameters": [
                     {
@@ -1723,7 +1723,7 @@
         "/api/entitlements/user-entitlements/": {
             "get": {
                 "operationId": "api_entitlements_user_entitlements_list",
-                "description": "Returns paginated aggregate user entitlement rows for users visible to the active Firm. Each row shows the global derived status and the active firm's own backing status, if any.",
+                "description": "Returns a paginated list of user entitlement records for users associated with your firm. Each record includes the overall entitlement status and your firm's status for that entitlement, when available.",
                 "summary": "List user entitlements",
                 "parameters": [
                     {
@@ -1753,7 +1753,7 @@
                                 "REVOKED"
                             ]
                         },
-                        "description": "Filter rows by aggregate entitlement status."
+                        "description": "Filter by overall entitlement status."
                     }
                 ],
                 "tags": [
@@ -1781,7 +1781,7 @@
                                                 "total_pages": 7,
                                                 "has_next": true,
                                                 "has_previous": false,
-                                                "next": "http://api.example.org/accounts/?page=2",
+                                                "next": "https://api.example.org/resources/?page=2",
                                                 "previous": null
                                             },
                                             "results": [
@@ -1801,7 +1801,7 @@
                                                 }
                                             ]
                                         },
-                                        "summary": "First page of aggregate entitlement rows"
+                                        "summary": "First page of entitlement records"
                                     }
                                 }
                             }
@@ -1814,7 +1814,7 @@
         "/api/entitlements/user-entitlements/{user_id}/": {
             "get": {
                 "operationId": "api_entitlements_user_entitlements_retrieve",
-                "description": "Returns aggregate entitlement rows for a `user_id` visible to the active Firm. The response includes the derived global status and the active firm's local status.",
+                "description": "Returns entitlement records for the requested `user_id` when the user is associated with your firm. Each record includes the overall entitlement status and your firm's status for that entitlement, when available.",
                 "summary": "Retrieve user entitlements by user_id",
                 "parameters": [
                     {
@@ -1823,7 +1823,7 @@
                         "schema": {
                             "type": "integer"
                         },
-                        "description": "Trader user id whose entitlement rows should be returned.",
+                        "description": "Trader user id whose entitlement records should be returned.",
                         "required": true
                     }
                 ],
@@ -1887,7 +1887,7 @@
         "/api/maintenance/": {
             "get": {
                 "operationId": "api_maintenance_retrieve",
-                "description": "Returns the current platform outage state. Possible values: `ok`, `scheduled_outage` (daily 17:00–18:00 America/New_York maintenance window), `unscheduled_outage`.",
+                "description": "Returns the current platform outage state. `ok` means no outage is reported. `scheduled_outage` is returned during the daily 17:00–18:00 America/New_York maintenance window. `unscheduled_outage` is reserved for unplanned outage reporting.",
                 "summary": "Scheduled outage status",
                 "tags": [
                     "Status"
@@ -1913,7 +1913,7 @@
                                         "value": {
                                             "status": "scheduled_outage"
                                         },
-                                        "summary": "Within the daily 5–6pm ET maintenance window"
+                                        "summary": "Within the daily 17:00–18:00 America/New_York maintenance window"
                                     }
                                 }
                             }
@@ -1926,8 +1926,8 @@
         "/api/trade/accounts/{account_id}/positions/close/": {
             "patch": {
                 "operationId": "api_trade_accounts_positions_close_partial_update_2",
-                "description": "Close all open positions for a specific account. Staff users can operate on any account within the active Firm, while non-staff users are limited to their own accounts. `triggered_by` is optional and defaults to request user metadata when omitted.",
-                "summary": "Close all open positions for an account",
+                "description": "Submits close requests for each open symbol exposure on the specified account. Staff users can operate on any account for the authenticated firm, while non-staff users are limited to their own accounts. The response reports submitted and failed symbol requests; a 200 response does not guarantee every symbol request succeeded. `triggered_by` is optional and defaults to authenticated user metadata when omitted.",
+                "summary": "Submit close requests for all open positions for an account",
                 "parameters": [
                     {
                         "in": "path",
@@ -1982,8 +1982,8 @@
         "/api/trade/accounts/positions/close/": {
             "patch": {
                 "operationId": "api_trade_accounts_positions_close_partial_update",
-                "description": "Close all open positions for a specific account. Staff users can operate on any account within the active Firm, while non-staff users are limited to their own accounts. `triggered_by` is optional and defaults to request user metadata when omitted.",
-                "summary": "Close all open positions for an account",
+                "description": "Submits close requests for each open symbol exposure on the specified account. Staff users can operate on any account for the authenticated firm, while non-staff users are limited to their own accounts. The response reports submitted and failed symbol requests; a 200 response does not guarantee every symbol request succeeded. `triggered_by` is optional and defaults to authenticated user metadata when omitted.",
+                "summary": "Submit close requests for all open positions for an account",
                 "tags": [
                     "Trade"
                 ],
@@ -2028,7 +2028,7 @@
         "/api/trade/positions/": {
             "get": {
                 "operationId": "api_trade_positions_list",
-                "description": "Returns positions for all accounts on the Firm filtered by state.\nStaff users can see every account in the firm, while non-staff users only see their own accounts.\n\n`date_from` / `date_to` are coarse date filters. For timestamp-level windows, use `opened_at_after` / `opened_at_before` with `state=OPEN` or `closed_at_after` / `closed_at_before` with `state=CLOSED`.\n\nDefault state is OPEN. Results are ordered by open_time DESC then id DESC for OPEN positions, and close_time DESC then open_time DESC for CLOSED positions.",
+                "description": "Returns positions for trading accounts the caller can access, filtered by state.\nStaff users can see every account in the firm, while non-staff users only see their own accounts.\n\n`date_from` / `date_to` are coarse date filters. For timestamp-level windows, use `opened_at_after` / `opened_at_before` with `state=OPEN` or `closed_at_after` / `closed_at_before` with `state=CLOSED`.\n\nDefault state is OPEN. Results are ordered by open_time DESC then id DESC for OPEN positions, and close_time DESC then open_time DESC for CLOSED positions.",
                 "summary": "List positions across accessible accounts",
                 "parameters": [
                     {
@@ -2063,7 +2063,7 @@
                         "schema": {
                             "type": "string"
                         },
-                        "description": "Filter by open/close date (>=) DD-MM-YYYY or YYYY-MM-DD depending on state"
+                        "description": "Filter by open or close date. Use `YYYY-MM-DD`; `DD-MM-YYYY` is also accepted for compatibility. For timestamp precision, use the `opened_at_*` or `closed_at_*` filters."
                     },
                     {
                         "in": "query",
@@ -2071,7 +2071,7 @@
                         "schema": {
                             "type": "string"
                         },
-                        "description": "Filter by open/close date (<=) DD-MM-YYYY or YYYY-MM-DD depending on state"
+                        "description": "Filter by open or close date. Use `YYYY-MM-DD`; `DD-MM-YYYY` is also accepted for compatibility. For timestamp precision, use the `opened_at_*` or `closed_at_*` filters."
                     },
                     {
                         "in": "query",
@@ -2115,7 +2115,7 @@
                         "schema": {
                             "type": "string"
                         },
-                        "description": "Optional Prop Firm slug for authenticated-user self reads. When supplied, results are limited to the caller's own accounts in that firm."
+                        "description": "Optional firm slug. When supplied, results are limited to the caller's own accounts for that firm."
                     },
                     {
                         "in": "query",
@@ -2156,23 +2156,36 @@
                                                 "total_pages": 7,
                                                 "has_next": true,
                                                 "has_previous": false,
-                                                "next": "http://api.example.org/accounts/?page=2",
+                                                "next": "https://api.example.org/resources/?page=2",
                                                 "previous": null
                                             },
                                             "results": [
                                                 {
-                                                    "id": 101,
-                                                    "account_id": 2001,
-                                                    "account_currency": "USD",
-                                                    "uid": "POS-OPEN-001",
-                                                    "symbol": "EURUSD",
-                                                    "direction": "long",
-                                                    "volume": "1.0000",
-                                                    "open_price": "1.0800",
-                                                    "open_time": "2025-01-13T10:00:00Z",
-                                                    "tp": "1.0900",
-                                                    "sl": "1.0700",
-                                                    "open_pnl": "0.0000"
+                                                    "meta": {
+                                                        "count": 1,
+                                                        "page": 1,
+                                                        "page_size": 20,
+                                                        "total_pages": 1,
+                                                        "has_next": false,
+                                                        "has_previous": false,
+                                                        "next": null,
+                                                        "previous": null
+                                                    },
+                                                    "results": [
+                                                        {
+                                                            "account_id": 2001,
+                                                            "account_currency": "USD",
+                                                            "uid": "POS-OPEN-001",
+                                                            "symbol": "EURUSD",
+                                                            "direction": "long",
+                                                            "volume": "1.0000",
+                                                            "open_price": "1.0800",
+                                                            "open_time": "2025-01-13T10:00:00Z",
+                                                            "tp": "1.0900",
+                                                            "sl": "1.0700",
+                                                            "open_pnl": "0.0000"
+                                                        }
+                                                    ]
                                                 }
                                             ]
                                         },
@@ -2189,8 +2202,8 @@
         "/api/trade/positions/close/": {
             "patch": {
                 "operationId": "api_trade_positions_close_partial_update",
-                "description": "Close open position exposure for one `account_id` + `symbol` pair. Staff users can operate on any position within the active Firm, while non-staff users are limited to their own accounts. `triggered_by` is optional and defaults to request user metadata when omitted.",
-                "summary": "Close open position(s) for one account+symbol",
+                "description": "Submits a close request for the specified account and symbol. Staff users can operate on any position for the authenticated firm, while non-staff users are limited to their own accounts. `triggered_by` is optional and defaults to authenticated user metadata when omitted.",
+                "summary": "Submit a close request for one account and symbol",
                 "tags": [
                     "Trade"
                 ],
@@ -2235,7 +2248,7 @@
         "/api/users/": {
             "get": {
                 "operationId": "api_users_list",
-                "description": "Paginated users scoped to the active Prop Firm including account counts.",
+                "description": "Returns paginated users for your firm, including account counts.",
                 "summary": "List users",
                 "parameters": [
                     {
@@ -2512,7 +2525,7 @@
                         "schema": {
                             "type": "string"
                         },
-                        "description": "Comma-separated active membership Prop Firm IDs."
+                        "description": "Comma-separated firm IDs where the user has an active membership."
                     },
                     {
                         "in": "query",
@@ -2520,7 +2533,7 @@
                         "schema": {
                             "type": "string"
                         },
-                        "description": "Comma-separated active membership Prop Firm slugs."
+                        "description": "Comma-separated firm slugs where the user has an active membership."
                     },
                     {
                         "in": "query",
@@ -2588,7 +2601,7 @@
                                     "$ref": "#/components/schemas/PaginatedUserTickblazeManagerList"
                                 },
                                 "examples": {
-                                    "ExampleWithdrawalSerializer": {
+                                    "UserResponse": {
                                         "value": {
                                             "meta": {
                                                 "count": 123,
@@ -2597,7 +2610,7 @@
                                                 "total_pages": 7,
                                                 "has_next": true,
                                                 "has_previous": false,
-                                                "next": "http://api.example.org/accounts/?page=2",
+                                                "next": "https://api.example.org/resources/?page=2",
                                                 "previous": null
                                             },
                                             "results": [
@@ -2620,11 +2633,11 @@
                                                     "blocked": false,
                                                     "prop_firm": {
                                                         "prop_firm_id": "507ede8b-951d-4c38-877a-f242463ce14f",
-                                                        "prop_firm_name": "Apex Trading Co",
-                                                        "prop_firm_slug": "apex-trading-co",
+                                                        "prop_firm_name": "Example Firm",
+                                                        "prop_firm_slug": "example-firm",
                                                         "account_count": 42,
                                                         "created_at": "2021-06-18T10:42:15Z",
-                                                        "contact_email": "support@apextrading.co"
+                                                        "contact_email": "support@example.com"
                                                     },
                                                     "user_type": "pro",
                                                     "total_accounts_purchased": 12,
@@ -2654,7 +2667,7 @@
                                                 }
                                             ]
                                         },
-                                        "summary": "Example WithdrawalSerializer"
+                                        "summary": "User response"
                                     }
                                 }
                             }
@@ -2665,7 +2678,7 @@
             },
             "post": {
                 "operationId": "api_users_create",
-                "description": "Create a new trader user scoped to the authenticated firm. The created user will have access only to the trader dashboard and will not be able to access admin-only endpoints. Users are global for login credentials, not firm-specific. If the email already belongs to an existing user in a different firm, the existing user is attached to the current firm and the submitted password is ignored. Use `results[].existing_user` to decide whether to show the submitted onboarding password or tell the trader to use or reset their existing password.",
+                "description": "Create a trader user for your firm. The user can access only the trader dashboard and cannot access admin-only endpoints. If the email already belongs to an existing user, that user is granted access for your firm and the submitted password is ignored. Use `results[].existing_user` to decide whether to show the submitted onboarding password or tell the trader to use or reset their existing password.",
                 "summary": "Create a trader user",
                 "tags": [
                     "Users"
@@ -2744,7 +2757,7 @@
                                             "duration_ms": 31
                                         },
                                         "summary": "New trader user created",
-                                        "description": "`existing_user=false` means the submitted password was applied to the newly created global user."
+                                        "description": "`existing_user=false` means the submitted password was applied to the newly created user."
                                     },
                                     "ExistingUserSuccessResponse": {
                                         "value": {
@@ -2767,8 +2780,8 @@
                                             },
                                             "duration_ms": 28
                                         },
-                                        "summary": "Existing global user attached to firm",
-                                        "description": "`existing_user=true` means the email already belonged to a global user from another firm. The submitted password was ignored; direct the trader to use or reset their existing password."
+                                        "summary": "Existing user granted access for your firm",
+                                        "description": "`existing_user=true` means the email already belongs to an existing user. The submitted password was ignored; direct the trader to use or reset their existing password."
                                     }
                                 }
                             }
@@ -2782,18 +2795,18 @@
                                     "$ref": "#/components/schemas/TickblazeProvisioningError"
                                 },
                                 "examples": {
-                                    "TickblazeValidationError": {
+                                    "ProvisioningValidationError": {
                                         "value": {
-                                            "detail": "Tickblaze provisioning failed: Tickblaze sync failed at step 'demo_account': 400 Client Error: Bad Request for url: https://api.tickblaze.com/v2/demo-account (lastName should not be empty)",
+                                            "detail": "User creation failed: last name should not be empty.",
                                             "upstream_detail": "lastName should not be empty"
                                         },
-                                        "summary": "Tickblaze rejected the provisioning payload",
-                                        "description": "Validation details from Tickblaze are exposed when safe to return."
+                                        "summary": "Trader user could not be created",
+                                        "description": "Validation details are returned when safe to expose."
                                     }
                                 }
                             }
                         },
-                        "description": "Tickblaze provisioning failed; the user was not created. `upstream_detail` is included when Tickblaze returns a safe validation message."
+                        "description": "Provisioning failed; the user was not created. `upstream_detail` is included when a safe validation message is available."
                     }
                 }
             }
@@ -2830,7 +2843,7 @@
                                     "$ref": "#/components/schemas/UserTickblazeManager"
                                 },
                                 "examples": {
-                                    "ExampleWithdrawalSerializer": {
+                                    "UserResponse": {
                                         "value": {
                                             "id": 123,
                                             "email": "jane.doe@example.com",
@@ -2850,11 +2863,11 @@
                                             "blocked": false,
                                             "prop_firm": {
                                                 "prop_firm_id": "507ede8b-951d-4c38-877a-f242463ce14f",
-                                                "prop_firm_name": "Apex Trading Co",
-                                                "prop_firm_slug": "apex-trading-co",
+                                                "prop_firm_name": "Example Firm",
+                                                "prop_firm_slug": "example-firm",
                                                 "account_count": 42,
                                                 "created_at": "2021-06-18T10:42:15Z",
-                                                "contact_email": "support@apextrading.co"
+                                                "contact_email": "support@example.com"
                                             },
                                             "user_type": "pro",
                                             "total_accounts_purchased": 12,
@@ -2882,7 +2895,7 @@
                                                 }
                                             ]
                                         },
-                                        "summary": "Example WithdrawalSerializer"
+                                        "summary": "User response"
                                     }
                                 }
                             }
@@ -2893,7 +2906,7 @@
             },
             "patch": {
                 "operationId": "api_users_partial_update",
-                "description": "Allows admins to update a user's profile/contact information.",
+                "description": "Allows authorized callers to update supported user profile/contact fields and KYC verification status. Use deactivate/reactivate endpoints to manage user access.",
                 "summary": "Update user contact details",
                 "parameters": [
                     {
@@ -2938,67 +2951,12 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/UserTickblazeManager"
-                                },
-                                "examples": {
-                                    "ExampleWithdrawalSerializer": {
-                                        "value": {
-                                            "id": 123,
-                                            "email": "jane.doe@example.com",
-                                            "full_name": "Jane Doe",
-                                            "ip_addresses": [
-                                                "203.0.113.42",
-                                                "198.51.100.17"
-                                            ],
-                                            "country_code": "US",
-                                            "state": "CA",
-                                            "postcode": "94105",
-                                            "kyc_verified": "verified",
-                                            "city": "San Francisco",
-                                            "address_1": "123 Market Street",
-                                            "address_2": "Suite 500",
-                                            "phone": "+1-415-555-0199",
-                                            "blocked": false,
-                                            "prop_firm": {
-                                                "prop_firm_id": "507ede8b-951d-4c38-877a-f242463ce14f",
-                                                "prop_firm_name": "Apex Trading Co",
-                                                "prop_firm_slug": "apex-trading-co",
-                                                "account_count": 42,
-                                                "created_at": "2021-06-18T10:42:15Z",
-                                                "contact_email": "support@apextrading.co"
-                                            },
-                                            "user_type": "pro",
-                                            "total_accounts_purchased": 12,
-                                            "total_active_accounts": 8,
-                                            "total_failed_accounts": 4,
-                                            "duplicate_group": {
-                                                "count": 2,
-                                                "emails": [
-                                                    "jane.doe@example.com",
-                                                    "jane.alt@example.com"
-                                                ],
-                                                "csv": "jane.doe@example.com,jane.alt@example.com"
-                                            },
-                                            "trading_status": "enabled",
-                                            "entitlements": [
-                                                {
-                                                    "name": "CME Market Data",
-                                                    "data_level": "l1",
-                                                    "exchanges": [
-                                                        "cbot",
-                                                        "nymex"
-                                                    ],
-                                                    "status": "AUTHORIZED",
-                                                    "authorized_at": "2026-03-20T09:15:00Z"
-                                                }
-                                            ]
-                                        },
-                                        "summary": "Example WithdrawalSerializer"
-                                    }
+                                    "type": "object",
+                                    "additionalProperties": {}
                                 }
                             }
                         },
-                        "description": ""
+                        "description": "Returns a confirmation object with `details` when the user details are updated."
                     }
                 }
             }
@@ -3044,7 +3002,7 @@
         "/api/users/{id}/deactivate/": {
             "post": {
                 "operationId": "api_users_deactivate_create",
-                "description": "Deactivate a user with an audit reason, preventing him from purchasing and block all their accounts. If to block their accounts is not needed, send deactivate_accounts as false.",
+                "description": "Deactivate a user with an audit reason. By default, the user's trading accounts for your firm are also blocked. Set `deactivate_accounts=false` to leave trading accounts unchanged.",
                 "summary": "Deactivate a user",
                 "parameters": [
                     {
@@ -3140,7 +3098,7 @@
         "/api/users/{id}/reactivate/": {
             "post": {
                 "operationId": "api_users_reactivate_create",
-                "description": "Restore access for a previously deactivated user.This endpoint only reactivates the user profile and does not change any trading accounts.",
+                "description": "Restore access for a previously deactivated user. This endpoint reactivates only the user profile and does not change trading accounts.",
                 "summary": "Reactivate a user",
                 "parameters": [
                     {
@@ -3227,7 +3185,7 @@
         "/api/users/{user_id}/entitlements/": {
             "patch": {
                 "operationId": "api_users_entitlements_partial_update",
-                "description": "Updates the active Firm's own backing row for one entitlement on the requested `user_id`. L2 rows may be created directly to allow L2 market data. L1 rows must already exist from challenge-backed entitlement eligibility. Call `PATCH /api/users/{user_id}/entitlements/` using the `user_id` value returned by `GET /api/entitlements/user-entitlements/`, and pass either the entitlement name or exchange codes plus level in the request body to identify which package should be changed. Use `AUTHORIZED` to grant access, `REVOKED` to remove access, or `PENDING` to restore a firm-local pending state. A firm revoke does not remove another firm's backing, so the returned global status may remain `AUTHORIZED` or `PENDING` even when the active firm's local status is `REVOKED`.",
+                "description": "Update your firm's entitlement status for the requested user and entitlement package. L2 market data access may be created directly. L1 access can be updated only when the user already has L1 eligibility. Call `PATCH /api/users/{user_id}/entitlements/` using the `user_id` value returned by `GET /api/entitlements/user-entitlements/`, and pass either the entitlement name or exchange codes plus level in the request body to identify which package should be changed. Use `AUTHORIZED` to grant access, `REVOKED` to remove access, or `PENDING` to restore a pending state for your firm. Revoking access for your firm may not change the entitlement status shown by later entitlement reads if the user remains eligible through another source.",
                 "summary": "Authorize or revoke user entitlements",
                 "parameters": [
                     {
@@ -3236,7 +3194,7 @@
                         "schema": {
                             "type": "integer"
                         },
-                        "description": "Trader user id whose entitlement rows should be updated.",
+                        "description": "Trader user id whose entitlement records should be updated.",
                         "required": true
                     }
                 ],
@@ -3300,13 +3258,13 @@
                 ],
                 "responses": {
                     "204": {
-                        "description": "The active firm's targeted entitlement row was created or updated successfully."
+                        "description": "Your firm's targeted entitlement status was created or updated successfully."
                     },
                     "400": {
                         "description": "Invalid `user_id` or request payload."
                     },
                     "404": {
-                        "description": "The user or entitlement was not found, or a required L1 challenge-backed row does not exist."
+                        "description": "The requested entitlement or exchange code was not found, or the user does not already have the requested L1 entitlement for your firm."
                     }
                 }
             }
@@ -3314,7 +3272,7 @@
         "/api/users/entitlements/": {
             "get": {
                 "operationId": "api_users_entitlements_retrieve",
-                "description": "Returns a paginated per-user entitlement snapshot. Each entitlement key is present for every row; `true` means at least one authorized entitlement currently enables trading on that scope.",
+                "description": "Returns a paginated per-user entitlement snapshot. Each user item includes every entitlement key; `true` means the user has at least one authorized entitlement that enables trading for that entitlement.",
                 "summary": "List entitlement flags by user",
                 "parameters": [
                     {
@@ -3359,7 +3317,7 @@
         "/api/users/export/": {
             "get": {
                 "operationId": "api_users_export_retrieve",
-                "description": "Exports every user matching the same filters, search, sorting, permissions, and active Prop Firm scope used by the users list. The CSV mirrors the users-list response fields except user-deduplication duplicate-group details.",
+                "description": "Exports every user matching the same filters, search, sorting, permissions, and firm scope used by the users list. The CSV mirrors the users-list response fields except user-deduplication duplicate-group details.",
                 "summary": "Export users CSV",
                 "parameters": [
                     {
@@ -3384,7 +3342,7 @@
                         "schema": {
                             "type": "string"
                         },
-                        "description": "Comma-separated active membership Prop Firm IDs."
+                        "description": "Comma-separated firm IDs where the user has an active membership."
                     },
                     {
                         "in": "query",
@@ -3392,7 +3350,7 @@
                         "schema": {
                             "type": "string"
                         },
-                        "description": "Comma-separated active membership Prop Firm slugs."
+                        "description": "Comma-separated firm slugs where the user has an active membership."
                     },
                     {
                         "in": "query",
@@ -3429,8 +3387,8 @@
         "/api/withdrawals/": {
             "get": {
                 "operationId": "api_withdrawals_retrieve",
-                "description": "List withdrawals with optional filtering for month and/or account ID.",
-                "summary": "Get a list of withdrawals.",
+                "description": "List your firm's withdrawals from the last 365 days, with optional filtering by payout month, account ID, or both.",
+                "summary": "List withdrawals",
                 "parameters": [
                     {
                         "in": "query",
@@ -3438,7 +3396,7 @@
                         "schema": {
                             "type": "integer"
                         },
-                        "description": "Specific account ID to return widthdrawals for"
+                        "description": "Specific account ID to return withdrawals for."
                     },
                     {
                         "in": "query",
@@ -3508,7 +3466,7 @@
                         "description": "List of withdrawals"
                     },
                     "400": {
-                        "description": "Invalid date format"
+                        "description": "Invalid page, page size, account ID, or date filter."
                     }
                 }
             }
@@ -3516,7 +3474,7 @@
         "/api/withdrawals/{account_id}/request/": {
             "get": {
                 "operationId": "api_withdrawals_request_retrieve",
-                "description": "Get request to check potential withdrawal details for a user's account.",
+                "description": "Return estimated payout details and the next withdrawal date for a user's account.",
                 "summary": "Check potential withdrawal details",
                 "parameters": [
                     {
@@ -3560,7 +3518,7 @@
                         "description": "Potential withdrawal details provided."
                     },
                     "403": {
-                        "description": "Withdrawal not allowed or error in withdrawal validation."
+                        "description": "Withdrawal is not allowed for the requested account."
                     },
                     "404": {
                         "description": "Account not found."
@@ -3569,7 +3527,7 @@
             },
             "post": {
                 "operationId": "api_withdrawals_request_create",
-                "description": "Post request to initiate a withdrawal for a user's account.",
+                "description": "Submit a withdrawal request for the requested account. When accepted, the account is blocked from trading.",
                 "summary": "Request a withdrawal",
                 "parameters": [
                     {
@@ -3631,7 +3589,7 @@
         "/auth/login/": {
             "post": {
                 "operationId": "auth_login_create",
-                "description": "Authenticate with email + password.",
+                "description": "Authenticates a user with an email address and password.",
                 "summary": "Authenticate a user",
                 "tags": [
                     "Auth"
@@ -3721,7 +3679,52 @@
                                 }
                             }
                         },
-                        "description": "Session token issued."
+                        "description": "Returns the issued session token and related login metadata."
+                    }
+                }
+            }
+        },
+        "/auth/refresh/": {
+            "post": {
+                "operationId": "auth_refresh_create",
+                "description": "Rotates a refresh token and returns a new session access token.",
+                "summary": "Refresh access token",
+                "tags": [
+                    "Auth"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RefreshTokenRequest"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RefreshTokenRequest"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RefreshTokenRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {}
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RefreshTokenResponse"
+                                }
+                            }
+                        },
+                        "description": ""
                     }
                 }
             }
@@ -3960,7 +3963,7 @@
                     "notes": {
                         "type": "string",
                         "nullable": true,
-                        "description": "Internal notes or comments related to the account.",
+                        "description": "Optional notes or comments to store with the account.",
                         "maxLength": 2000
                     }
                 },
@@ -3975,7 +3978,7 @@
                 "properties": {
                     "account_id": {
                         "type": "integer",
-                        "description": "Internal account identifier."
+                        "description": "Trading account identifier."
                     },
                     "status": {
                         "allOf": [
@@ -4083,10 +4086,58 @@
                         "pattern": "^-?\\d{0,12}(?:\\.\\d{0,2})?$",
                         "nullable": true
                     },
+                    "daily_pnl": {
+                        "type": "string",
+                        "format": "decimal",
+                        "pattern": "^-?\\d{0,26}(?:\\.\\d{0,2})?$",
+                        "readOnly": true,
+                        "nullable": true,
+                        "description": "Profit or loss for the account during the current trading day."
+                    },
+                    "realized_pnl": {
+                        "type": "string",
+                        "format": "decimal",
+                        "pattern": "^-?\\d{0,26}(?:\\.\\d{0,2})?$",
+                        "readOnly": true,
+                        "nullable": true,
+                        "description": "Realized profit or loss for the account."
+                    },
+                    "unrealized_pnl": {
+                        "type": "string",
+                        "format": "decimal",
+                        "pattern": "^-?\\d{0,26}(?:\\.\\d{0,2})?$",
+                        "readOnly": true,
+                        "nullable": true,
+                        "description": "Unrealized profit or loss from currently open exposure."
+                    },
+                    "total_pnl": {
+                        "type": "string",
+                        "format": "decimal",
+                        "pattern": "^-?\\d{0,26}(?:\\.\\d{0,2})?$",
+                        "readOnly": true,
+                        "nullable": true,
+                        "description": "Realized lifetime profit or loss for the account."
+                    },
+                    "realized_lifetime_pnl": {
+                        "type": "string",
+                        "format": "decimal",
+                        "pattern": "^-?\\d{0,26}(?:\\.\\d{0,2})?$",
+                        "readOnly": true,
+                        "nullable": true,
+                        "description": "Realized lifetime profit or loss for the account."
+                    },
+                    "total_commission": {
+                        "type": "string",
+                        "format": "decimal",
+                        "pattern": "^-?\\d{0,26}(?:\\.\\d{0,2})?$",
+                        "readOnly": true,
+                        "nullable": true,
+                        "description": "Total commission charged to the account."
+                    },
                     "closed_pnl_today": {
                         "type": "string",
                         "format": "decimal",
-                        "pattern": "^-?\\d{0,12}(?:\\.\\d{0,2})?$",
+                        "pattern": "^-?\\d{0,26}(?:\\.\\d{0,2})?$",
                         "nullable": true
                     },
                     "profit_loss": {
@@ -4094,41 +4145,72 @@
                         "format": "double",
                         "readOnly": true
                     },
+                    "peak_balance": {
+                        "type": "string",
+                        "format": "decimal",
+                        "pattern": "^-?\\d{0,24}(?:\\.\\d{0,4})?$",
+                        "readOnly": true,
+                        "nullable": true,
+                        "description": "Peak realized account balance for the relevant risk window, excluding open-position profit or loss."
+                    },
+                    "peak_equity": {
+                        "type": "string",
+                        "format": "decimal",
+                        "pattern": "^-?\\d{0,24}(?:\\.\\d{0,4})?$",
+                        "readOnly": true,
+                        "nullable": true,
+                        "description": "Peak account equity for the relevant risk window, including open-position profit or loss."
+                    },
+                    "peak_equity_timestamp": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "nullable": true,
+                        "description": "Timestamp when the peak account equity was recorded."
+                    },
                     "balance_high": {
                         "type": "string",
                         "format": "decimal",
-                        "pattern": "^-?\\d{0,10}(?:\\.\\d{0,4})?$",
+                        "pattern": "^-?\\d{0,24}(?:\\.\\d{0,4})?$",
                         "nullable": true
                     },
                     "balance_low": {
                         "type": "string",
                         "format": "decimal",
-                        "pattern": "^-?\\d{0,10}(?:\\.\\d{0,4})?$",
+                        "pattern": "^-?\\d{0,24}(?:\\.\\d{0,4})?$",
                         "nullable": true
                     },
                     "equity_high": {
                         "type": "string",
                         "format": "decimal",
-                        "pattern": "^-?\\d{0,10}(?:\\.\\d{0,4})?$",
+                        "pattern": "^-?\\d{0,24}(?:\\.\\d{0,4})?$",
                         "nullable": true
                     },
                     "equity_low": {
                         "type": "string",
                         "format": "decimal",
-                        "pattern": "^-?\\d{0,10}(?:\\.\\d{0,4})?$",
+                        "pattern": "^-?\\d{0,24}(?:\\.\\d{0,4})?$",
                         "nullable": true
+                    },
+                    "low_equity_timestamp": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "nullable": true,
+                        "description": "Timestamp when the lowest account equity was recorded."
                     },
                     "eod_peak_balance": {
                         "type": "string",
                         "format": "decimal",
-                        "pattern": "^-?\\d{0,10}(?:\\.\\d{0,4})?$",
+                        "pattern": "^-?\\d{0,24}(?:\\.\\d{0,4})?$",
                         "nullable": true
                     },
                     "min_balance": {
                         "type": "string",
                         "format": "decimal",
-                        "pattern": "^-?\\d{0,10}(?:\\.\\d{0,4})?$",
-                        "nullable": true
+                        "pattern": "^-?\\d{0,24}(?:\\.\\d{0,4})?$",
+                        "nullable": true,
+                        "description": "Lowest observed account balance for the relevant risk window."
                     },
                     "min_balance_at": {
                         "type": "string",
@@ -4136,10 +4218,18 @@
                         "readOnly": true,
                         "nullable": true
                     },
+                    "failure_threshold": {
+                        "type": "string",
+                        "format": "decimal",
+                        "pattern": "^-?\\d{0,24}(?:\\.\\d{0,4})?$",
+                        "readOnly": true,
+                        "nullable": true,
+                        "description": "Failure threshold supplied with failure context, when available."
+                    },
                     "mae": {
                         "type": "string",
                         "format": "decimal",
-                        "pattern": "^-?\\d{0,12}(?:\\.\\d{0,2})?$",
+                        "pattern": "^-?\\d{0,26}(?:\\.\\d{0,2})?$",
                         "nullable": true
                     },
                     "mae_at": {
@@ -4151,7 +4241,7 @@
                     "mfe": {
                         "type": "string",
                         "format": "decimal",
-                        "pattern": "^-?\\d{0,12}(?:\\.\\d{0,2})?$",
+                        "pattern": "^-?\\d{0,26}(?:\\.\\d{0,2})?$",
                         "nullable": true
                     },
                     "mfe_at": {
@@ -4159,6 +4249,11 @@
                         "format": "date-time",
                         "readOnly": true,
                         "nullable": true
+                    },
+                    "failure_metadata": {
+                        "readOnly": true,
+                        "nullable": true,
+                        "description": "Structured breach or failure context for the account, when available."
                     },
                     "trading_days": {
                         "type": "integer",
@@ -4217,18 +4312,30 @@
                     "balance",
                     "closed_positions",
                     "created_at",
+                    "daily_pnl",
                     "disabled_at",
                     "equity",
+                    "failure_metadata",
+                    "failure_threshold",
                     "initial_balance",
                     "long_positions_count",
+                    "low_equity_timestamp",
                     "mae_at",
                     "mfe_at",
                     "min_balance_at",
                     "modified_at",
+                    "peak_balance",
+                    "peak_equity",
+                    "peak_equity_timestamp",
                     "phase",
                     "profit_loss",
+                    "realized_lifetime_pnl",
+                    "realized_pnl",
                     "short_positions_count",
+                    "total_commission",
+                    "total_pnl",
                     "trading_days",
+                    "unrealized_pnl",
                     "user",
                     "user_id"
                 ]
@@ -4284,29 +4391,81 @@
                         "description": "Timestamp when auto-liquidation was triggered, if applicable."
                     },
                     "failure_metadata": {
-                        "type": "string",
                         "readOnly": true,
-                        "description": "Additional metadata describing the reason for an account failure, if any."
+                        "description": "Structured breach or failure context for the account, when available."
                     },
                     "current_balance": {
                         "type": "string",
                         "readOnly": true,
-                        "description": "Current account balance based on live trading data."
+                        "description": "Current account balance."
+                    },
+                    "current_equity": {
+                        "type": "string",
+                        "readOnly": true,
+                        "description": "Current account equity, including unrealized profit or loss."
                     },
                     "previous_end_of_day_balance": {
                         "type": "string",
                         "readOnly": true,
                         "description": "Account balance at the end of the previous trading day."
                     },
+                    "daily_pnl": {
+                        "type": "string",
+                        "format": "decimal",
+                        "pattern": "^-?\\d{0,26}(?:\\.\\d{0,2})?$",
+                        "readOnly": true,
+                        "nullable": true,
+                        "description": "Profit or loss for the account during the current trading day."
+                    },
+                    "realized_pnl": {
+                        "type": "string",
+                        "format": "decimal",
+                        "pattern": "^-?\\d{0,26}(?:\\.\\d{0,2})?$",
+                        "readOnly": true,
+                        "nullable": true,
+                        "description": "Realized profit or loss for the account."
+                    },
+                    "unrealized_pnl": {
+                        "type": "string",
+                        "format": "decimal",
+                        "pattern": "^-?\\d{0,26}(?:\\.\\d{0,2})?$",
+                        "readOnly": true,
+                        "nullable": true,
+                        "description": "Unrealized profit or loss from currently open exposure."
+                    },
+                    "total_pnl": {
+                        "type": "string",
+                        "format": "decimal",
+                        "pattern": "^-?\\d{0,26}(?:\\.\\d{0,2})?$",
+                        "readOnly": true,
+                        "nullable": true,
+                        "description": "Realized lifetime profit or loss for the account."
+                    },
+                    "realized_lifetime_pnl": {
+                        "type": "string",
+                        "format": "decimal",
+                        "pattern": "^-?\\d{0,26}(?:\\.\\d{0,2})?$",
+                        "readOnly": true,
+                        "nullable": true,
+                        "description": "Realized lifetime profit or loss for the account."
+                    },
+                    "total_commission": {
+                        "type": "string",
+                        "format": "decimal",
+                        "pattern": "^-?\\d{0,26}(?:\\.\\d{0,2})?$",
+                        "readOnly": true,
+                        "nullable": true,
+                        "description": "Total commission charged to the account."
+                    },
                     "closed_pnl_today": {
                         "type": "string",
                         "readOnly": true,
-                        "description": "Total realized profit or loss from closed trades for the current day."
+                        "description": "Realized profit or loss from positions closed during the current trading day."
                     },
                     "open_pnl": {
                         "type": "string",
                         "readOnly": true,
-                        "description": "Unrealized profit or loss from currently open positions."
+                        "description": "Legacy open-position profit or loss value. Prefer unrealized_pnl when present."
                     },
                     "open_positions_count": {
                         "type": "string",
@@ -4316,7 +4475,30 @@
                     "peak_realized_balance": {
                         "type": "string",
                         "readOnly": true,
-                        "description": "Highest realized account balance reached historically."
+                        "description": "Highest realized account balance reached for the relevant risk window."
+                    },
+                    "peak_balance": {
+                        "type": "string",
+                        "format": "decimal",
+                        "pattern": "^-?\\d{0,24}(?:\\.\\d{0,4})?$",
+                        "readOnly": true,
+                        "nullable": true,
+                        "description": "Peak realized account balance for the relevant risk window, excluding open-position profit or loss."
+                    },
+                    "peak_equity": {
+                        "type": "string",
+                        "format": "decimal",
+                        "pattern": "^-?\\d{0,24}(?:\\.\\d{0,4})?$",
+                        "readOnly": true,
+                        "nullable": true,
+                        "description": "Peak account equity for the relevant risk window, including open-position profit or loss."
+                    },
+                    "peak_equity_timestamp": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "nullable": true,
+                        "description": "Timestamp when the peak account equity was recorded."
                     },
                     "lowest_realized_balance": {
                         "type": "string",
@@ -4326,12 +4508,35 @@
                     "peak_unrealized_balance": {
                         "type": "string",
                         "readOnly": true,
-                        "description": "Highest unrealized equity value reached historically."
+                        "description": "Highest account equity reached for the relevant risk window."
                     },
                     "lowest_unrealized_balance": {
                         "type": "string",
                         "readOnly": true,
                         "description": "Lowest unrealized equity value reached historically."
+                    },
+                    "low_equity_timestamp": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "nullable": true,
+                        "description": "Timestamp when the lowest account equity was recorded."
+                    },
+                    "eod_peak_balance": {
+                        "type": "string",
+                        "format": "decimal",
+                        "pattern": "^-?\\d{0,24}(?:\\.\\d{0,4})?$",
+                        "readOnly": true,
+                        "nullable": true,
+                        "description": "End-of-day peak balance used for EOD trailing drawdown calculations."
+                    },
+                    "failure_threshold": {
+                        "type": "string",
+                        "format": "decimal",
+                        "pattern": "^-?\\d{0,24}(?:\\.\\d{0,4})?$",
+                        "readOnly": true,
+                        "nullable": true,
+                        "description": "Failure threshold supplied with failure context, when available."
                     },
                     "account_currency": {
                         "type": "string",
@@ -4381,7 +4586,7 @@
                     "oms_flags": {
                         "type": "string",
                         "readOnly": true,
-                        "description": "Operational or risk flags reported by the Order Management System."
+                        "description": "Operational or risk flags reported for the account."
                     },
                     "last_trade_timestamp": {
                         "type": "string",
@@ -4411,15 +4616,15 @@
                     "minimum_account_balance": {
                         "type": "string",
                         "format": "decimal",
-                        "pattern": "^-?\\d{0,10}(?:\\.\\d{0,4})?$",
+                        "pattern": "^-?\\d{0,24}(?:\\.\\d{0,4})?$",
                         "readOnly": true,
                         "nullable": true,
-                        "description": "Minimum balance the account is allowed to reach before violation."
+                        "description": "Lowest observed account balance for the relevant risk window."
                     },
                     "minimum_account_balance_timestamp": {
                         "type": "string",
                         "readOnly": true,
-                        "description": "Timestamp when the account reached its minimum balance, if applicable."
+                        "description": "Timestamp when the lowest observed account balance was recorded, if applicable."
                     },
                     "trading_days": {
                         "type": "string",
@@ -4498,14 +4703,8 @@
                     "live_account_equity": {
                         "type": "string",
                         "format": "decimal",
-                        "pattern": "^-?\\d{0,12}(?:\\.\\d{0,2})?$",
+                        "pattern": "^-?\\d{0,26}(?:\\.\\d{0,2})?$",
                         "default": "0.00"
-                    },
-                    "eod_peak_balance": {
-                        "type": "string",
-                        "format": "decimal",
-                        "pattern": "^-?\\d{0,10}(?:\\.\\d{0,4})?$",
-                        "nullable": true
                     },
                     "leverage": {
                         "type": "string",
@@ -4516,13 +4715,13 @@
                     "mae": {
                         "type": "string",
                         "format": "decimal",
-                        "pattern": "^-?\\d{0,12}(?:\\.\\d{0,2})?$",
+                        "pattern": "^-?\\d{0,26}(?:\\.\\d{0,2})?$",
                         "nullable": true
                     },
                     "mfe": {
                         "type": "string",
                         "format": "decimal",
-                        "pattern": "^-?\\d{0,12}(?:\\.\\d{0,2})?$",
+                        "pattern": "^-?\\d{0,26}(?:\\.\\d{0,2})?$",
                         "nullable": true
                     },
                     "mae_timestamp": {
@@ -4538,8 +4737,9 @@
                     "min_balance": {
                         "type": "string",
                         "format": "decimal",
-                        "pattern": "^-?\\d{0,10}(?:\\.\\d{0,4})?$",
-                        "nullable": true
+                        "pattern": "^-?\\d{0,24}(?:\\.\\d{0,4})?$",
+                        "nullable": true,
+                        "description": "Lowest observed account balance for the relevant risk window."
                     },
                     "min_balance_timestamp": {
                         "type": "string",
@@ -4746,10 +4946,14 @@
                     "created",
                     "current_balance",
                     "current_balance_decimal",
+                    "current_equity",
                     "daily_max_drawdown",
+                    "daily_pnl",
                     "drawdown_type",
                     "email",
+                    "eod_peak_balance",
                     "failure_metadata",
+                    "failure_threshold",
                     "id",
                     "initial_balance_decimal",
                     "is_trading_allowed",
@@ -4759,6 +4963,7 @@
                     "live_account_balance_currency",
                     "live_account_equity_currency",
                     "long_positions_count",
+                    "low_equity_timestamp",
                     "lowest_realized_balance",
                     "lowest_unrealized_balance",
                     "max_drawdown",
@@ -4769,15 +4974,23 @@
                     "oms_flags",
                     "open_pnl",
                     "open_positions_count",
+                    "peak_balance",
+                    "peak_equity",
+                    "peak_equity_timestamp",
                     "peak_realized_balance",
                     "peak_unrealized_balance",
                     "previous_end_of_day_balance",
                     "profit_loss_currency",
                     "prop_firm_id",
                     "prop_firm_name",
+                    "realized_lifetime_pnl",
+                    "realized_pnl",
                     "risk_algorithm",
                     "short_positions_count",
+                    "total_commission",
+                    "total_pnl",
                     "trading_days",
+                    "unrealized_pnl",
                     "user_id"
                 ]
             },
@@ -5113,7 +5326,7 @@
                     "profit": {
                         "type": "string",
                         "format": "decimal",
-                        "pattern": "^-?\\d{0,8}(?:\\.\\d{0,2})?$",
+                        "pattern": "^-?\\d{0,12}(?:\\.\\d{0,2})?$",
                         "nullable": true
                     },
                     "net_pnl": {
@@ -5125,7 +5338,7 @@
                     "commission": {
                         "type": "string",
                         "format": "decimal",
-                        "pattern": "^-?\\d{0,8}(?:\\.\\d{0,2})?$",
+                        "pattern": "^-?\\d{0,12}(?:\\.\\d{0,2})?$",
                         "nullable": true
                     },
                     "swap": {
@@ -5312,19 +5525,19 @@
                             }
                         ],
                         "readOnly": true,
-                        "description": "Aggregate entitlement status across all firms backing this user. AUTHORIZED wins over PENDING, and PENDING wins over REVOKED.\n\n* `PENDING` - Pending Authorization\n* `AUTHORIZED` - Authorized\n* `REVOKED` - Revoked"
+                        "description": "Overall entitlement status for this user across eligible sources. `AUTHORIZED` takes precedence over `PENDING`; `PENDING` takes precedence over `REVOKED`.\n\n* `PENDING` - Pending Authorization\n* `AUTHORIZED` - Authorized\n* `REVOKED` - Revoked"
                     },
                     "firm_status": {
                         "type": "string",
                         "readOnly": true,
                         "nullable": true,
-                        "description": "Status of the active firm's entitlement for this user. This can differ from the aggregate `status` when another firm is backing the entitlement."
+                        "description": "Status of your firm's entitlement for this user. This can differ from `status` when the user remains eligible through another source."
                     },
                     "created": {
                         "type": "string",
                         "format": "date-time",
                         "readOnly": true,
-                        "description": "Timestamp when this entitlement first appeared in the aggregate entitlement view."
+                        "description": "Timestamp when this overall entitlement record was created."
                     }
                 },
                 "required": [
@@ -5340,14 +5553,17 @@
                 "type": "object",
                 "properties": {
                     "status": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Health status for this check."
                     },
                     "timestamp": {
                         "type": "string",
-                        "format": "date-time"
+                        "format": "date-time",
+                        "description": "Time the health response was generated."
                     },
                     "version": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Application version when available; may be null when no version is reported."
                     }
                 },
                 "required": [
@@ -5382,14 +5598,14 @@
                     },
                     "prop_firm": {
                         "type": "string",
-                        "description": "Active Prop Firm slug bound to the issued session token."
+                        "description": "Firm slug bound to the issued session token."
                     },
                     "prop_firms": {
                         "type": "array",
                         "items": {
                             "type": "string"
                         },
-                        "description": "All active Prop Firm slugs the authenticated user belongs to."
+                        "description": "Firm slugs available to the authenticated user."
                     },
                     "expires_at": {
                         "type": "string",
@@ -5495,7 +5711,7 @@
                     "profit": {
                         "type": "string",
                         "format": "decimal",
-                        "pattern": "^-?\\d{0,8}(?:\\.\\d{0,2})?$",
+                        "pattern": "^-?\\d{0,12}(?:\\.\\d{0,2})?$",
                         "nullable": true
                     },
                     "state": {
@@ -5525,7 +5741,7 @@
                     "commission": {
                         "type": "string",
                         "format": "decimal",
-                        "pattern": "^-?\\d{0,8}(?:\\.\\d{0,2})?$",
+                        "pattern": "^-?\\d{0,12}(?:\\.\\d{0,2})?$",
                         "nullable": true
                     },
                     "swap": {
@@ -5748,14 +5964,14 @@
                             "total_pages": 7,
                             "has_next": true,
                             "has_previous": false,
-                            "next": "http://api.example.org/accounts/?page=2",
+                            "next": "https://api.example.org/resources/?page=2",
                             "previous": null
                         },
                         "properties": {
                             "count": {
                                 "type": "integer",
                                 "example": 123,
-                                "description": "Total number of rows matching the request."
+                                "description": "Total number of items matching the request."
                             },
                             "page": {
                                 "type": "integer",
@@ -5765,7 +5981,7 @@
                             "page_size": {
                                 "type": "integer",
                                 "example": 20,
-                                "description": "Number of rows returned per page."
+                                "description": "Number of items returned per page."
                             },
                             "total_pages": {
                                 "type": "integer",
@@ -5833,14 +6049,14 @@
                             "total_pages": 7,
                             "has_next": true,
                             "has_previous": false,
-                            "next": "http://api.example.org/accounts/?page=2",
+                            "next": "https://api.example.org/resources/?page=2",
                             "previous": null
                         },
                         "properties": {
                             "count": {
                                 "type": "integer",
                                 "example": 123,
-                                "description": "Total number of rows matching the request."
+                                "description": "Total number of items matching the request."
                             },
                             "page": {
                                 "type": "integer",
@@ -5850,7 +6066,7 @@
                             "page_size": {
                                 "type": "integer",
                                 "example": 20,
-                                "description": "Number of rows returned per page."
+                                "description": "Number of items returned per page."
                             },
                             "total_pages": {
                                 "type": "integer",
@@ -5918,14 +6134,14 @@
                             "total_pages": 7,
                             "has_next": true,
                             "has_previous": false,
-                            "next": "http://api.example.org/accounts/?page=2",
+                            "next": "https://api.example.org/resources/?page=2",
                             "previous": null
                         },
                         "properties": {
                             "count": {
                                 "type": "integer",
                                 "example": 123,
-                                "description": "Total number of rows matching the request."
+                                "description": "Total number of items matching the request."
                             },
                             "page": {
                                 "type": "integer",
@@ -5935,7 +6151,7 @@
                             "page_size": {
                                 "type": "integer",
                                 "example": 20,
-                                "description": "Number of rows returned per page."
+                                "description": "Number of items returned per page."
                             },
                             "total_pages": {
                                 "type": "integer",
@@ -6003,14 +6219,14 @@
                             "total_pages": 7,
                             "has_next": true,
                             "has_previous": false,
-                            "next": "http://api.example.org/accounts/?page=2",
+                            "next": "https://api.example.org/resources/?page=2",
                             "previous": null
                         },
                         "properties": {
                             "count": {
                                 "type": "integer",
                                 "example": 123,
-                                "description": "Total number of rows matching the request."
+                                "description": "Total number of items matching the request."
                             },
                             "page": {
                                 "type": "integer",
@@ -6020,7 +6236,7 @@
                             "page_size": {
                                 "type": "integer",
                                 "example": 20,
-                                "description": "Number of rows returned per page."
+                                "description": "Number of items returned per page."
                             },
                             "total_pages": {
                                 "type": "integer",
@@ -6088,14 +6304,14 @@
                             "total_pages": 7,
                             "has_next": true,
                             "has_previous": false,
-                            "next": "http://api.example.org/accounts/?page=2",
+                            "next": "https://api.example.org/resources/?page=2",
                             "previous": null
                         },
                         "properties": {
                             "count": {
                                 "type": "integer",
                                 "example": 123,
-                                "description": "Total number of rows matching the request."
+                                "description": "Total number of items matching the request."
                             },
                             "page": {
                                 "type": "integer",
@@ -6105,7 +6321,7 @@
                             "page_size": {
                                 "type": "integer",
                                 "example": 20,
-                                "description": "Number of rows returned per page."
+                                "description": "Number of items returned per page."
                             },
                             "total_pages": {
                                 "type": "integer",
@@ -6173,14 +6389,14 @@
                             "total_pages": 7,
                             "has_next": true,
                             "has_previous": false,
-                            "next": "http://api.example.org/accounts/?page=2",
+                            "next": "https://api.example.org/resources/?page=2",
                             "previous": null
                         },
                         "properties": {
                             "count": {
                                 "type": "integer",
                                 "example": 123,
-                                "description": "Total number of rows matching the request."
+                                "description": "Total number of items matching the request."
                             },
                             "page": {
                                 "type": "integer",
@@ -6190,7 +6406,7 @@
                             "page_size": {
                                 "type": "integer",
                                 "example": 20,
-                                "description": "Number of rows returned per page."
+                                "description": "Number of items returned per page."
                             },
                             "total_pages": {
                                 "type": "integer",
@@ -6258,14 +6474,14 @@
                             "total_pages": 7,
                             "has_next": true,
                             "has_previous": false,
-                            "next": "http://api.example.org/accounts/?page=2",
+                            "next": "https://api.example.org/resources/?page=2",
                             "previous": null
                         },
                         "properties": {
                             "count": {
                                 "type": "integer",
                                 "example": 123,
-                                "description": "Total number of rows matching the request."
+                                "description": "Total number of items matching the request."
                             },
                             "page": {
                                 "type": "integer",
@@ -6275,7 +6491,7 @@
                             "page_size": {
                                 "type": "integer",
                                 "example": 20,
-                                "description": "Number of rows returned per page."
+                                "description": "Number of items returned per page."
                             },
                             "total_pages": {
                                 "type": "integer",
@@ -6343,14 +6559,14 @@
                             "total_pages": 7,
                             "has_next": true,
                             "has_previous": false,
-                            "next": "http://api.example.org/accounts/?page=2",
+                            "next": "https://api.example.org/resources/?page=2",
                             "previous": null
                         },
                         "properties": {
                             "count": {
                                 "type": "integer",
                                 "example": 123,
-                                "description": "Total number of rows matching the request."
+                                "description": "Total number of items matching the request."
                             },
                             "page": {
                                 "type": "integer",
@@ -6360,7 +6576,7 @@
                             "page_size": {
                                 "type": "integer",
                                 "example": 20,
-                                "description": "Number of rows returned per page."
+                                "description": "Number of items returned per page."
                             },
                             "total_pages": {
                                 "type": "integer",
@@ -6436,7 +6652,7 @@
                     "custom_status_reason": {
                         "type": "string",
                         "nullable": true,
-                        "description": "Optional operator note stored on the account and included in downstream status handling."
+                        "description": "Optional note stored with the account status."
                     }
                 }
             },
@@ -6475,13 +6691,13 @@
                     },
                     "triggered_by": {
                         "type": "string",
-                        "description": "Optional actor label. Defaults to request.user email/name/id, then 'system'.",
+                        "description": "Optional actor label. Defaults to the authenticated user's email, name, or identifier, then 'system'.",
                         "maxLength": 255
                     },
                     "user_id": {
                         "type": "integer",
                         "minimum": 1,
-                        "description": "Optional user identifier for OMS logging. Defaults to the account owner."
+                        "description": "Optional user identifier to associate with the close request. Defaults to the account owner."
                     }
                 }
             },
@@ -6498,13 +6714,13 @@
                     },
                     "triggered_by": {
                         "type": "string",
-                        "description": "Optional actor label. Defaults to request.user email/name/id, then 'system'.",
+                        "description": "Optional actor label. Defaults to the authenticated user's email, name, or identifier, then 'system'.",
                         "maxLength": 255
                     },
                     "user_id": {
                         "type": "integer",
                         "minimum": 1,
-                        "description": "Optional user identifier for OMS logging. Defaults to the account owner."
+                        "description": "Optional user identifier to associate with the close request. Defaults to the account owner."
                     }
                 }
             },
@@ -6578,7 +6794,7 @@
                                 "$ref": "#/components/schemas/LevelEnum"
                             }
                         ],
-                        "description": "Market-data level for the entitlement being updated. Missing rows may only be created for L2.\n\n* `l1` - Level 1\n* `l2` - Level 2"
+                        "description": "Market data level for the entitlement being updated. L2 requests can create a new entitlement entry for your firm; L1 requests require existing eligibility for the requested entitlement.\n\n* `l1` - Level 1\n* `l2` - Level 2"
                     },
                     "status": {
                         "allOf": [
@@ -6586,7 +6802,7 @@
                                 "$ref": "#/components/schemas/Status19bEnum"
                             }
                         ],
-                        "description": "New status to apply to the active firm's entitlement for the selected user and entitlement. This does not change another firm's backing status.\n\n* `PENDING` - Pending Authorization\n* `AUTHORIZED` - Authorized\n* `REVOKED` - Revoked"
+                        "description": "New status to apply to your firm's entitlement for the selected user and entitlement. This does not change eligibility from other sources.\n\n* `PENDING` - Pending Authorization\n* `AUTHORIZED` - Authorized\n* `REVOKED` - Revoked"
                     }
                 }
             },
@@ -7008,13 +7224,13 @@
                         "items": {
                             "$ref": "#/components/schemas/PublicWithdrawal"
                         },
-                        "description": "Withdrawal rows for the requested page."
+                        "description": "Withdrawals returned for the requested page."
                     },
                     "average_payout": {
                         "type": "string",
                         "format": "decimal",
                         "pattern": "^-?\\d{0,10}(?:\\.\\d{0,2})?$",
-                        "description": "Average withdrawable payout amount across matching withdrawals."
+                        "description": "Average requested withdrawable amount across withdrawals from the last 365 days, scoped by account ID when provided; the optional month filter does not change this value."
                     }
                 },
                 "required": [
@@ -7041,11 +7257,60 @@
                 "type": "string",
                 "description": "* `not_reconciled` - Not reconciled\n* `original_superseded` - Original superseded\n* `replacement_account` - Replacement account"
             },
+            "RefreshTokenRequest": {
+                "type": "object",
+                "properties": {
+                    "refresh_token": {
+                        "type": "string",
+                        "description": "Refresh token to obtain a new access token"
+                    }
+                },
+                "required": [
+                    "refresh_token"
+                ]
+            },
+            "RefreshTokenResponse": {
+                "type": "object",
+                "properties": {
+                    "token": {
+                        "type": "string"
+                    },
+                    "prop_firms": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "All active Prop Firm slugs the authenticated user belongs to."
+                    },
+                    "expires_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "refresh_token": {
+                        "type": "string"
+                    },
+                    "refresh_expires_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "required": [
+                    "expires_at",
+                    "refresh_expires_at",
+                    "refresh_token",
+                    "token"
+                ]
+            },
             "ScheduledOutage": {
                 "type": "object",
                 "properties": {
                     "status": {
-                        "$ref": "#/components/schemas/ScheduledOutageStatusEnum"
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/ScheduledOutageStatusEnum"
+                            }
+                        ],
+                        "description": "Current outage state. `ok` means no outage is reported; `scheduled_outage` is returned during the daily 17:00–18:00 America/New_York maintenance window; `unscheduled_outage` is reserved for unplanned outage reporting.\n\n* `ok` - ok\n* `scheduled_outage` - scheduled_outage\n* `unscheduled_outage` - unscheduled_outage"
                     }
                 },
                 "required": [
@@ -7573,7 +7838,7 @@
                         "type": "string",
                         "format": "decimal",
                         "pattern": "^-?\\d{0,10}(?:\\.\\d{0,2})?$",
-                        "description": "Optional amount to withdraw. When omitted, the full available amount is requested."
+                        "description": "Optional withdrawable profit amount to request before applying the profit split. When omitted, the full available withdrawable amount is requested."
                     },
                     "withdrawal_method": {
                         "type": "string",
